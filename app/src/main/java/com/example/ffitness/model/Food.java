@@ -23,8 +23,8 @@ public class Food {
     @SerializedName("fat")
     private double fat;
 
-    @SerializedName("carbonhydrate")
-    private double carbonhydrate;
+    @SerializedName("carbohydrate")
+    private double carbohydrate;
 
     @SerializedName("calories")
     private double calories;
@@ -86,12 +86,12 @@ public class Food {
         this.fat = fat;
     }
 
-    public double getCarbonhydrate() {
-        return carbonhydrate;
+    public double getCarbohydrate() {
+        return carbohydrate;
     }
 
-    public void setCarbonhydrate(double carbonhydrate) {
-        this.carbonhydrate = carbonhydrate;
+    public void setCarbohydrate(double carbohydrate) {
+        this.carbohydrate = carbohydrate;
     }
 
     public double getCalories() {
@@ -135,7 +135,7 @@ public class Food {
                 ", unit=" + unit +
                 ", protein=" + protein +
                 ", fat=" + fat +
-                ", carbonhydrate=" + carbonhydrate +
+                ", carbohydrate=" + carbohydrate +
                 ", calories=" + calories +
                 ", category='" + category + '\'' +
                 ", createdAt=" + createdAt +
