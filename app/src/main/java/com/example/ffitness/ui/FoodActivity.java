@@ -1,5 +1,6 @@
 package com.example.ffitness.ui;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -37,7 +38,7 @@ public class FoodActivity extends AppCompatActivity {
             return insets;
         });
 
-        foodRepository = new FoodRepository();
+        foodRepository = new FoodRepository(getApplication());
         
         // Fetch all foods
         fetchAllFoods();
