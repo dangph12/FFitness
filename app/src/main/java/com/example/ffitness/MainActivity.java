@@ -13,12 +13,17 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.ffitness.api.ApiResponse;
 import com.example.ffitness.dto.response.ExerciseResponse;
+import com.example.ffitness.dto.response.WorkoutResponse;
+import com.example.ffitness.model.Workout;
 import com.example.ffitness.repository.ExerciseRepository;
+import com.example.ffitness.repository.WorkoutRepository;
 import com.example.ffitness.ui.HomeFragment;
 import com.example.ffitness.ui.HistoryFragment;
 import com.example.ffitness.ui.ProfileFragment;
 import com.example.ffitness.ui.WorkoutFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,7 +33,8 @@ public class MainActivity extends AppCompatActivity {
     
     private static final String TAG = "MainActivity";
     private ExerciseRepository exerciseRepository;
-    
+    private WorkoutRepository workoutRepository;
+
     private BottomNavigationView bottomNavigationView;
     
     @Override
@@ -46,7 +52,11 @@ public class MainActivity extends AppCompatActivity {
 
         exerciseRepository = new ExerciseRepository(getApplication());
         fetchExercises();
-        
+
+        workoutRepository = new WorkoutRepository(getApplication());
+        fetchWorkouts();
+
+
         if (savedInstanceState == null) {
             loadFragment(new HomeFragment());
         }
@@ -72,7 +82,37 @@ public class MainActivity extends AppCompatActivity {
             return false;
         });
     }
-    
+
+    private void fetchWorkouts() {
+        Log.d(TAG, "Fetching workouts...");
+
+        workoutRepository.getWorkouts().enqueue(new Callback<ApiResponse<List<Workout>>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<List<Workout>>> call, Response<ApiResponse<List<Workout>>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse<List<Workout>> apiResponse = response.body();
+                    Log.d(TAG, "Success: " + apiResponse.getMessage());
+                    Log.d(TAG, "Status: " + apiResponse.getStatus());
+
+                    if (apiResponse.getData() != null) {
+                        List<Workout> workouts = apiResponse.getData();
+
+                        for (Workout workout: workouts) {
+                            Log.d(TAG, workout.toString());
+                        }
+                    }
+                } else {
+                    Log.e(TAG, "Response not successful: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<List<Workout>>> call, Throwable t) {
+                Log.e(TAG, "Failed to fetch workouts: " + t.getMessage(), t);
+            }
+        });
+    }
+
     private void loadFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, fragment);
