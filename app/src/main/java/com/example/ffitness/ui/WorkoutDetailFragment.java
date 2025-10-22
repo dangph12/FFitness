@@ -10,7 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,8 +32,8 @@ public class WorkoutDetailFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         
-        textViewWorkoutTitle = view.findViewById(R.id.textView_workout_title);
-        recyclerViewExercises = view.findViewById(R.id.recyclerView_exercises);
+        textViewWorkoutTitle = view.findViewById(R.id.text_view_workout_title);
+        recyclerViewExercises = view.findViewById(R.id.recycler_view_exercises);
         buttonStartWorkout = view.findViewById(R.id.button_start_workout);
         
         recyclerViewExercises.setLayoutManager(new LinearLayoutManager(getContext()));

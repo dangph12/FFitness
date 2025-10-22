@@ -63,7 +63,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
 
         public WorkoutViewHolder(@NonNull View itemView) {
             super(itemView);
-            textViewTitle = itemView.findViewById(R.id.textView_workout_title);
+            textViewTitle = itemView.findViewById(R.id.text_view_workout_title);
 
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();

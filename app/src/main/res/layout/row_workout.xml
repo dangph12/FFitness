@@ -14,7 +14,7 @@
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/textView_workout_title"
+            android:id="@+id/text_view_workout_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Workout Title"

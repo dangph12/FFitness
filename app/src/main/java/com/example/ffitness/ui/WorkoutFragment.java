@@ -46,7 +46,7 @@ public class WorkoutFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         
-        recyclerView = view.findViewById(R.id.recyclerView_workouts);
+        recyclerView = view.findViewById(R.id.recycler_view_workouts);
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         

@@ -8,11 +8,13 @@
     tools:context=".ui.WorkoutFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView_workouts"
+        android:id="@+id/recycler_view_workouts"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="-268dp"
         tools:listitem="@layout/row_workout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

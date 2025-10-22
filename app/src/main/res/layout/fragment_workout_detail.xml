@@ -18,7 +18,7 @@
             android:padding="16dp">
 
             <TextView
-                android:id="@+id/textView_workout_title"
+                android:id="@+id/text_view_workout_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Workout Detail"
@@ -26,7 +26,7 @@
                 android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView_exercises"
+                android:id="@+id/recycler_view_exercises"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
