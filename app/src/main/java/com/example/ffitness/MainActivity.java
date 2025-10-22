@@ -86,16 +86,19 @@ public class MainActivity extends AppCompatActivity {
     private void fetchWorkouts() {
         Log.d(TAG, "Fetching workouts...");
 
-        workoutRepository.getWorkouts().enqueue(new Callback<ApiResponse<List<Workout>>>() {
+        workoutRepository.getWorkouts().enqueue(new Callback<ApiResponse<WorkoutResponse>>() {
             @Override
-            public void onResponse(Call<ApiResponse<List<Workout>>> call, Response<ApiResponse<List<Workout>>> response) {
+            public void onResponse(Call<ApiResponse<WorkoutResponse>> call, Response<ApiResponse<WorkoutResponse>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    ApiResponse<List<Workout>> apiResponse = response.body();
+                    ApiResponse<WorkoutResponse> apiResponse = response.body();
                     Log.d(TAG, "Success: " + apiResponse.getMessage());
                     Log.d(TAG, "Status: " + apiResponse.getStatus());
 
                     if (apiResponse.getData() != null) {
-                        List<Workout> workouts = apiResponse.getData();
+                        WorkoutResponse workoutResponse = apiResponse.getData();
+                        Log.d(TAG, "Total workouts: " + workoutResponse.getTotalWorkouts());
+                        Log.d(TAG, "Total pages: " + workoutResponse.getTotalPages());
+                        List<Workout> workouts = workoutResponse.getWorkouts();
 
                         for (Workout workout: workouts) {
                             Log.d(TAG, workout.toString());
@@ -107,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ApiResponse<List<Workout>>> call, Throwable t) {
+            public void onFailure(Call<ApiResponse<WorkoutResponse>> call, Throwable t) {
                 Log.e(TAG, "Failed to fetch workouts: " + t.getMessage(), t);
             }
         });

@@ -20,7 +20,7 @@ public interface ApiClient {
     Call<ApiResponse<Exercise>> getExerciseById(@Path("id") String id);
 
     @GET("/api/workouts")
-    Call<ApiResponse<List<Workout>>> getWorkouts();
+    Call<ApiResponse<WorkoutResponse>> getWorkouts();
     
     @GET("/api/workouts/{id}")
     Call<ApiResponse<WorkoutResponse>> getWorkoutById(@Path("id") String id);

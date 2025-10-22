@@ -19,7 +19,7 @@ public class WorkoutRepository {
         this.application = application;
     }
 
-    public Call<ApiResponse<List<Workout>>> getWorkouts() {
+    public Call<ApiResponse<WorkoutResponse>> getWorkouts() {
         return ApiService.getInstance(application).getApiClient().getWorkouts();
     }
     public Call<ApiResponse<WorkoutResponse>> getWorkoutById(String id) {
