@@ -19,8 +19,8 @@ public class WorkoutRepository {
         this.application = application;
     }
 
-    public Call<ApiResponse<WorkoutResponse>> getWorkouts() {
-        return ApiService.getInstance(application).getApiClient().getWorkouts();
+    public Call<ApiResponse<WorkoutResponse>> getWorkouts(int page, int limit) {
+        return ApiService.getInstance(application).getApiClient().getWorkouts(page, limit);
     }
     public Call<ApiResponse<WorkoutResponse>> getWorkoutById(String id) {
         return ApiService.getInstance(application).getApiClient().getWorkoutById(id);
