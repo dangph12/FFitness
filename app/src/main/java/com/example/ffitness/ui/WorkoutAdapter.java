@@ -3,6 +3,8 @@ package com.example.ffitness.ui;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -10,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ffitness.R;
 import com.example.ffitness.model.Workout;
+import com.example.ffitness.model.WorkoutSession;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,11 +62,17 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
     }
 
     class WorkoutViewHolder extends RecyclerView.ViewHolder {
-        private TextView textViewTitle;
+        private ImageView imageWorkout;
+        private TextView textTitle, textCreator, textVisibility, textDetails;
+        private ImageButton buttonStart;
 
         public WorkoutViewHolder(@NonNull View itemView) {
             super(itemView);
-            textViewTitle = itemView.findViewById(R.id.text_view_workout_title);
+            imageWorkout = itemView.findViewById(R.id.image_workout);
+            textTitle = itemView.findViewById(R.id.text_view_workout_title);
+            textCreator = itemView.findViewById(R.id.text_view_workout_creator);
+            textVisibility = itemView.findViewById(R.id.text_view_visibility);
+            textDetails = itemView.findViewById(R.id.text_view_workout_details);
 
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
@@ -74,7 +83,22 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
         }
 
         public void bind(Workout workout) {
-            textViewTitle.setText(workout.getTitle());
+            textTitle.setText(workout.getTitle());
+            textCreator.setText(workout.getUser() != null ? "by " + workout.getUser().getName() : "by Unknown");
+            textVisibility.setText(workout.getIsPublic() ? "Public" : "Private");
+            textVisibility.setBackgroundResource(
+                    workout.getIsPublic() ? R.drawable.bg_badge_public : R.drawable.bg_badge_private
+            );
+
+            int exerciseCount = workout.getExercises() != null ? workout.getExercises().size() : 0;
+            textDetails.setText(exerciseCount + " Exercises");
+
+            String imageUrl = workout.getImage();
+
+            if (imageUrl == null || imageUrl.trim().isEmpty()) {
+                imageWorkout.setImageResource(R.drawable.logo);
+                return;
+            }
         }
     }
 }
