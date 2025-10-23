@@ -4,6 +4,7 @@ package com.example.ffitness.api;
 import com.example.ffitness.dto.response.ExerciseResponse;
 import com.example.ffitness.dto.response.WorkoutResponse;
 import com.example.ffitness.model.Exercise;
+import com.example.ffitness.model.Workout;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -24,5 +25,5 @@ public interface ApiClient {
     );
     
     @GET("/api/workouts/{id}")
-    Call<ApiResponse<WorkoutResponse>> getWorkoutById(@Path("id") String id);
+    Call<ApiResponse<Workout>> getWorkoutById(@Path("id") String id);
 }
