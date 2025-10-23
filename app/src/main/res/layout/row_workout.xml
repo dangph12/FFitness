@@ -3,25 +3,84 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    android:layout_marginVertical="10dp"
+    android:layout_marginHorizontal="16dp"
+    app:cardCornerRadius="18dp"
+    app:cardElevation="5dp"
+    app:cardBackgroundColor="@android:color/white"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="14dp">
+
+        <ImageView
+            android:id="@+id/image_workout"
+            android:layout_width="95dp"
+            android:layout_height="95dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="Workout Image"
+            android:background="@drawable/bg_image_rounded"
+            android:elevation="2dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <TextView
             android:id="@+id/text_view_workout_title"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Workout Title"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="@android:color/black" />
+            android:textColor="#111827"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:layout_marginStart="12dp"
+            app:layout_constraintStart_toEndOf="@id/image_workout"
+            app:layout_constraintTop_toTopOf="@id/image_workout"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/text_view_workout_creator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="by Trainer Name"
+            android:textSize="14sp"
+            android:textColor="#6B7280"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="@id/text_view_workout_title"
+            app:layout_constraintTop_toBottomOf="@id/text_view_workout_title" />
+
+        <TextView
+            android:id="@+id/text_view_visibility"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Public"
+            android:textStyle="bold"
+            android:textSize="12sp"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="3dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_badge_public"
+            android:textColor="#2563EB"
+            app:layout_constraintStart_toStartOf="@id/text_view_workout_title"
+            app:layout_constraintTop_toBottomOf="@id/text_view_workout_creator" />
+
+        <TextView
+            android:id="@+id/text_view_workout_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3 Exercises • 20 mins"
+            android:textSize="13sp"
+            android:textColor="#374151"
+            android:layout_marginTop="6dp"
+            app:layout_constraintStart_toStartOf="@id/text_view_visibility"
+            app:layout_constraintTop_toBottomOf="@id/text_view_visibility" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
