@@ -5,10 +5,7 @@ import android.app.Application;
 import com.example.ffitness.api.ApiResponse;
 import com.example.ffitness.api.ApiService;
 import com.example.ffitness.dto.response.WorkoutResponse;
-import com.example.ffitness.model.Exercise;
 import com.example.ffitness.model.Workout;
-
-import java.util.List;
 
 import retrofit2.Call;
 
@@ -22,7 +19,9 @@ public class WorkoutRepository {
     public Call<ApiResponse<WorkoutResponse>> getWorkouts(int page, int limit) {
         return ApiService.getInstance(application).getApiClient().getWorkouts(page, limit);
     }
-    public Call<ApiResponse<WorkoutResponse>> getWorkoutById(String id) {
+
+    public Call<ApiResponse<Workout>> getWorkoutById(String id) {
         return ApiService.getInstance(application).getApiClient().getWorkoutById(id);
     }
+
 }
