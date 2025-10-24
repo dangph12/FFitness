@@ -1,5 +1,6 @@
 package com.example.ffitness.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -70,7 +71,9 @@ public class WorkoutDetailFragment extends Fragment {
         }
 
         buttonStartWorkout.setOnClickListener(v -> {
-            // TODO: implement workout start logic
+            Intent intent = new Intent(getActivity(), WorkoutSessionActivity.class);
+            intent.putExtra("workout_id", workoutId);
+            startActivity(intent);
         });
     }
 
