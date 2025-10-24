@@ -28,9 +28,12 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         
         btnGoToLogin = view.findViewById(R.id.btn_go_to_login);
-        btnGoToLogin.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), LoginActivity.class);
-            startActivity(intent);
-        });
+        
+        if (btnGoToLogin != null) {
+            btnGoToLogin.setOnClickListener(v -> {
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                startActivity(intent);
+            });
+        }
     }
 }
