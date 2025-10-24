@@ -16,15 +16,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ffitness.MainActivity;
 import com.example.ffitness.R;
-import com.example.ffitness.api.ApiResponse;
 import com.example.ffitness.model.Workout;
 import com.example.ffitness.repository.WorkoutRepository;
-import com.google.gson.Gson;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class WorkoutDetailFragment extends Fragment {
 
@@ -57,7 +52,13 @@ public class WorkoutDetailFragment extends Fragment {
         buttonStartWorkout = view.findViewById(R.id.button_start_workout);
 
         recyclerViewExercises.setLayoutManager(new LinearLayoutManager(getContext()));
-        exerciseAdapter = new ExerciseAdapter();
+        exerciseAdapter = new ExerciseAdapter(workoutSession -> {
+            ExerciseDetailFragment detailFragment = ExerciseDetailFragment.newInstance(workoutSession.getExercise().getId());
+            MainActivity mainActivity = (MainActivity) getActivity();
+            if (mainActivity != null) {
+                mainActivity.navigateToFragment(detailFragment, true);
+            }
+        });
         recyclerViewExercises.setAdapter(exerciseAdapter);
 
         workoutRepository = new WorkoutRepository(requireActivity().getApplication());
@@ -78,30 +79,18 @@ public class WorkoutDetailFragment extends Fragment {
     }
 
     private void loadWorkoutDetails(String workoutId) {
-        workoutRepository.getWorkoutById(workoutId)
-                .enqueue(new Callback<ApiResponse<Workout>>() {
-                    @Override
-                    public void onResponse(Call<ApiResponse<Workout>> call, Response<ApiResponse<Workout>> response) {
-                        if (response.isSuccessful() && response.body() != null) {
-                            Log.d(TAG, "JSON: " + new Gson().toJson(response.body()));
+        workoutRepository.getWorkoutById(workoutId, new WorkoutRepository.WorkoutCallback() {
+            @Override
+            public void onSuccess(Workout workout) {
+                Log.d(TAG, "Loaded workout: " + workout.getTitle());
+                bindWorkoutData(workout);
+            }
 
-                            Workout workout = response.body().getData();
-                            if (workout != null) {
-                                Log.d(TAG, "Loaded workout: " + workout.getTitle());
-                                bindWorkoutData(workout);
-                            } else {
-                                Log.e(TAG, "Workout data is null");
-                            }
-                        } else {
-                            Log.e(TAG, "Response failed: " + response.code());
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ApiResponse<Workout>> call, Throwable t) {
-                        Log.e(TAG, "Failed to load workout: " + t.getMessage());
-                    }
-                });
+            @Override
+            public void onError(String errorMessage) {
+                Log.e(TAG, "Failed to load workout: " + errorMessage);
+            }
+        });
     }
 
     private void bindWorkoutData(Workout workout) {

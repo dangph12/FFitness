@@ -10,9 +10,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.ffitness.R;
 import com.example.ffitness.model.Workout;
-import com.example.ffitness.model.WorkoutSession;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +54,13 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
     public void onBindViewHolder(@NonNull WorkoutViewHolder holder, int position) {
         Workout workout = workouts.get(position);
         holder.bind(workout);
+        
+        // Set click listener
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onWorkoutClick(workout);
+            }
+        });
     }
 
     @Override
@@ -73,13 +80,6 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
             textCreator = itemView.findViewById(R.id.text_view_workout_creator);
             textVisibility = itemView.findViewById(R.id.text_view_visibility);
             textDetails = itemView.findViewById(R.id.text_view_workout_details);
-
-            itemView.setOnClickListener(v -> {
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION && listener != null) {
-                    listener.onWorkoutClick(workouts.get(position));
-                }
-            });
         }
 
         public void bind(Workout workout) {
@@ -95,9 +95,14 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
 
             String imageUrl = workout.getImage();
 
-            if (imageUrl == null || imageUrl.trim().isEmpty()) {
+            if (imageUrl != null && !imageUrl.trim().isEmpty()) {
+                Glide.with(itemView.getContext())
+                        .load(imageUrl)
+                        .placeholder(R.drawable.logo)
+                        .error(R.drawable.logo)
+                        .into(imageWorkout);
+            } else {
                 imageWorkout.setImageResource(R.drawable.logo);
-                return;
             }
         }
     }

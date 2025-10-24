@@ -14,13 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ffitness.MainActivity;
 import com.example.ffitness.R;
-import com.example.ffitness.api.ApiResponse;
 import com.example.ffitness.dto.response.WorkoutResponse;
 import com.example.ffitness.repository.WorkoutRepository;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class WorkoutFragment extends Fragment {
 
@@ -86,37 +81,27 @@ public class WorkoutFragment extends Fragment {
         isLoading = true;
         Log.d(TAG, "Loading workouts page: " + page);
         
-        workoutRepository.getWorkouts(page, PAGE_SIZE).enqueue(new Callback<ApiResponse<WorkoutResponse>>() {
+        workoutRepository.getWorkouts(page, PAGE_SIZE, new WorkoutRepository.WorkoutsCallback() {
             @Override
-            public void onResponse(Call<ApiResponse<WorkoutResponse>> call, Response<ApiResponse<WorkoutResponse>> response) {
+            public void onSuccess(WorkoutResponse workoutResponse) {
                 isLoading = false;
+                totalPages = workoutResponse.getTotalPages();
+                currentPage = page;
                 
-                if (response.isSuccessful() && response.body() != null) {
-                    ApiResponse<WorkoutResponse> apiResponse = response.body();
-                    
-                    if (apiResponse.getData() != null) {
-                        WorkoutResponse workoutResponse = apiResponse.getData();
-                        totalPages = workoutResponse.getTotalPages();
-                        currentPage = page;
-                        
-                        Log.d(TAG, "Loaded page " + page + " of " + totalPages);
-                        Log.d(TAG, "Workouts in page: " + workoutResponse.getWorkouts().size());
-                        
-                        if (page == 1) {
-                            workoutAdapter.setWorkouts(workoutResponse.getWorkouts());
-                        } else {
-                            workoutAdapter.addWorkouts(workoutResponse.getWorkouts());
-                        }
-                    }
+                Log.d(TAG, "Loaded page " + page + " of " + totalPages);
+                Log.d(TAG, "Workouts in page: " + workoutResponse.getWorkouts().size());
+                
+                if (page == 1) {
+                    workoutAdapter.setWorkouts(workoutResponse.getWorkouts());
                 } else {
-                    Log.e(TAG, "Response not successful: " + response.code());
+                    workoutAdapter.addWorkouts(workoutResponse.getWorkouts());
                 }
             }
 
             @Override
-            public void onFailure(Call<ApiResponse<WorkoutResponse>> call, Throwable t) {
+            public void onError(String errorMessage) {
                 isLoading = false;
-                Log.e(TAG, "Failed to load workouts: " + t.getMessage(), t);
+                Log.e(TAG, "Failed to load workouts: " + errorMessage);
             }
         });
     }
