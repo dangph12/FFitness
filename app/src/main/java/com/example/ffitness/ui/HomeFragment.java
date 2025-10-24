@@ -1,9 +1,11 @@
 package com.example.ffitness.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,6 +14,8 @@ import androidx.fragment.app.Fragment;
 import com.example.ffitness.R;
 
 public class HomeFragment extends Fragment {
+
+    private Button btnGoToLogin;
 
     @Nullable
     @Override
@@ -22,6 +26,11 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // TODO: Initialize views and setup logic
+        
+        btnGoToLogin = view.findViewById(R.id.btn_go_to_login);
+        btnGoToLogin.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            startActivity(intent);
+        });
     }
 }
