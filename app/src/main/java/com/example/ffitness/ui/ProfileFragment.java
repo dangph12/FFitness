@@ -35,17 +35,14 @@ public class ProfileFragment extends Fragment {
         btnLogout = view.findViewById(R.id.btn_logout);
         
         btnLogout.setOnClickListener(v -> {
-            // Clear session
             prefsManager.clear();
             
-            // Show toast
             Toast.makeText(requireContext(), "Logged out successfully", Toast.LENGTH_SHORT).show();
             
             Intent intent = new Intent(getActivity(), MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             
-            // Close current activity
             if (getActivity() != null) {
                 getActivity().finish();
             }

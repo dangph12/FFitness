@@ -30,7 +30,6 @@ public class AuthRepository {
 
     public void login(String email, String password, LoginCallback callback) {
         try {
-            // Create JSON body
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("email", email);
             jsonBody.put("password", password);
@@ -40,7 +39,6 @@ public class AuthRepository {
                 MediaType.get("application/json")
             );
 
-            // Call API
             Call<ApiResponse<AuthResponse>> call = ApiService.getInstance(application).getApiClient().login(body);
             call.enqueue(new Callback<ApiResponse<AuthResponse>>() {
                 @Override

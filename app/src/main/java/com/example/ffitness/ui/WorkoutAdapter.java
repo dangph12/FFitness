@@ -55,7 +55,6 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
         Workout workout = workouts.get(position);
         holder.bind(workout);
         
-        // Set click listener
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onWorkoutClick(workout);

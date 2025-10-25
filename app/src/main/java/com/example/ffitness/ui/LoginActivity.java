@@ -42,7 +42,6 @@ public class LoginActivity extends AppCompatActivity {
         prefsManager = new SharedPreferencesManager(this);
         authRepository = new AuthRepository(getApplication());
 
-        // Check if already logged in
         if (prefsManager.isLoggedIn()) {
             navigateToMain();
             return;
