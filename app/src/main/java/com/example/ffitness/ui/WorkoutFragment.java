@@ -44,8 +44,10 @@ public class WorkoutFragment extends Fragment {
         
         ImageButton btnBack = view.findViewById(R.id.btn_back);
         btnBack.setOnClickListener(v -> {
-            if (getActivity() != null) {
-                getActivity().getSupportFragmentManager().popBackStack();
+            MainActivity mainActivity = (MainActivity) getActivity();
+            if (mainActivity != null) {
+                getSupportFragmentManager().popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                mainActivity.navigateToFragment(new HomeFragment(), false);
             }
         });
         
