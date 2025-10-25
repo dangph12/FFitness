@@ -28,7 +28,7 @@ public class HistoryFragment extends Fragment {
         btnBack.setOnClickListener(v -> {
             com.example.ffitness.MainActivity mainActivity = (com.example.ffitness.MainActivity) getActivity();
             if (mainActivity != null) {
-                getSupportFragmentManager().popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                mainActivity.getSupportFragmentManager().popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 mainActivity.navigateToFragment(new HomeFragment(), false);
             }
         });
