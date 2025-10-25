@@ -26,7 +26,6 @@ public class WorkoutDetailFragment extends Fragment {
 
     private static final String TAG = "WorkoutDetailFragment";
 
-    private ImageView imageWorkout;
     private TextView textViewWorkoutTitle, textViewCreator, textViewVisibility;
     private RecyclerView recyclerViewExercises;
     private Button buttonStartWorkout;
@@ -53,7 +52,6 @@ public class WorkoutDetailFragment extends Fragment {
             }
         });
 
-        imageWorkout = view.findViewById(R.id.image_workout_detail);
         textViewWorkoutTitle = view.findViewById(R.id.text_view_workout_title);
         textViewCreator = view.findViewById(R.id.text_view_creator);
         textViewVisibility = view.findViewById(R.id.text_view_visibility);
@@ -116,14 +114,6 @@ public class WorkoutDetailFragment extends Fragment {
         textViewVisibility.setBackgroundResource(
                 workout.getIsPublic() ? R.drawable.bg_badge_public : R.drawable.bg_badge_private
         );
-
-        String imageUrl = workout.getImage();
-        if (imageUrl == null || imageUrl.trim().isEmpty()) {
-            if (workout.getExercises() != null && !workout.getExercises().isEmpty()) {
-                imageUrl = workout.getExercises().get(0).getExercise().getTutorial();
-            }
-        }
-
 
         if (workout.getExercises() != null && !workout.getExercises().isEmpty()) {
             Log.d(TAG, "Loaded " + workout.getExercises().size() + " exercises");
