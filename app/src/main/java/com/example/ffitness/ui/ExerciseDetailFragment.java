@@ -1,6 +1,7 @@
 package com.example.ffitness.ui;
 
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.example.ffitness.R;
 import com.example.ffitness.model.Exercise;
 import com.example.ffitness.repository.ExerciseRepository;
+import com.example.ffitness.util.InstructionUtils;
 
 public class ExerciseDetailFragment extends Fragment {
 
@@ -25,9 +27,17 @@ public class ExerciseDetailFragment extends Fragment {
     private TextView textViewExerciseTitle;
     private TextView textViewExerciseDescription;
     private ImageView imageViewExercise;
-    
+
     private ExerciseRepository exerciseRepository;
     private String exerciseId;
+
+    public static ExerciseDetailFragment newInstance(String exerciseId) {
+        ExerciseDetailFragment fragment = new ExerciseDetailFragment();
+        Bundle args = new Bundle();
+        args.putString("exercise_id", exerciseId);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Nullable
     @Override
@@ -38,14 +48,13 @@ public class ExerciseDetailFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        
+
         textViewExerciseTitle = view.findViewById(R.id.textView_exercise_title);
         textViewExerciseDescription = view.findViewById(R.id.textView_exercise_description);
         imageViewExercise = view.findViewById(R.id.imageView_exercise);
-        
+
         exerciseRepository = new ExerciseRepository(requireActivity().getApplication());
-        
-        // Get exercise ID from arguments and load exercise details
+
         Bundle args = getArguments();
         if (args != null) {
             exerciseId = args.getString("exercise_id");
@@ -54,7 +63,7 @@ public class ExerciseDetailFragment extends Fragment {
             }
         }
     }
-    
+
     private void loadExerciseDetails(String exerciseId) {
         exerciseRepository.getExerciseById(exerciseId, new ExerciseRepository.ExerciseCallback() {
             @Override
@@ -70,12 +79,15 @@ public class ExerciseDetailFragment extends Fragment {
             }
         });
     }
-    
+
     private void bindExerciseData(Exercise exercise) {
         textViewExerciseTitle.setText(exercise.getTitle());
-        textViewExerciseDescription.setText(exercise.getInstructions());
-        
-        // Load image using Glide (supports GIF, JPG, PNG, etc.)
+
+        String raw = exercise.getInstructions() != null ? exercise.getInstructions() : "";
+        String plain = InstructionUtils.normalizeInstructions(raw);
+        textViewExerciseDescription.setText(plain);
+        textViewExerciseDescription.setMovementMethod(LinkMovementMethod.getInstance());
+
         if (exercise.getTutorial() != null && !exercise.getTutorial().isEmpty()) {
             Glide.with(this)
                     .load(exercise.getTutorial())
@@ -85,13 +97,5 @@ public class ExerciseDetailFragment extends Fragment {
         } else {
             imageViewExercise.setImageResource(R.drawable.logo);
         }
-    }
-    
-    public static ExerciseDetailFragment newInstance(String exerciseId) {
-        ExerciseDetailFragment fragment = new ExerciseDetailFragment();
-        Bundle args = new Bundle();
-        args.putString("exercise_id", exerciseId);
-        fragment.setArguments(args);
-        return fragment;
     }
 }
