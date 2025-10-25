@@ -34,6 +34,7 @@ public class WorkoutDetailFragment extends Fragment {
 
     private WorkoutRepository workoutRepository;
     private String workoutId;
+    private Workout currentWorkout;
 
     @Nullable
     @Override
@@ -80,9 +81,12 @@ public class WorkoutDetailFragment extends Fragment {
         }
 
         buttonStartWorkout.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), WorkoutSessionActivity.class);
-            intent.putExtra("workout_id", workoutId);
-            startActivity(intent);
+            if (currentWorkout != null) {
+                Intent intent = new Intent(getActivity(), WorkoutSessionActivity.class);
+                intent.putExtra("workout_id", workoutId);
+                intent.putExtra("workout", currentWorkout);
+                startActivity(intent);
+            }
         });
     }
 
@@ -102,6 +106,8 @@ public class WorkoutDetailFragment extends Fragment {
     }
 
     private void bindWorkoutData(Workout workout) {
+        currentWorkout = workout;
+        
         textViewWorkoutTitle.setText(workout.getTitle());
         textViewCreator.setText(workout.getUser() != null
                 ? "by " + workout.getUser().getName()
@@ -111,7 +117,6 @@ public class WorkoutDetailFragment extends Fragment {
                 workout.getIsPublic() ? R.drawable.bg_badge_public : R.drawable.bg_badge_private
         );
 
-        // Load image (use tutorial image of first exercise if main image is empty)
         String imageUrl = workout.getImage();
         if (imageUrl == null || imageUrl.trim().isEmpty()) {
             if (workout.getExercises() != null && !workout.getExercises().isEmpty()) {

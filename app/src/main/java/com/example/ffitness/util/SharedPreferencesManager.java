@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class SharedPreferencesManager {
-    private static final String PREF_NAME = "auth_prefs"; // Match ApiService
-    private static final String KEY_ACCESS_TOKEN = "AUTH_TOKEN"; // Match ApiService
+    private static final String PREF_NAME = "auth_prefs";
+    private static final String KEY_ACCESS_TOKEN = "AUTH_TOKEN";
     private static final String KEY_USER_ID = "user_id";
     
     private final SharedPreferences sharedPreferences;

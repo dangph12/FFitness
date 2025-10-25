@@ -1,6 +1,7 @@
 package com.example.ffitness.api;
 
 
+import com.example.ffitness.dto.response.AuthResponse;
 import com.example.ffitness.dto.response.ExerciseResponse;
 import com.example.ffitness.dto.response.WorkoutResponse;
 import com.example.ffitness.model.Exercise;
@@ -31,5 +32,8 @@ public interface ApiClient {
     Call<ApiResponse<Workout>> getWorkoutById(@Path("id") String id);
     
     @POST("/api/auth/login")
-    Call<ApiResponse<com.example.ffitness.dto.response.AuthResponse>> login(@Body RequestBody body);
+    Call<ApiResponse<AuthResponse>> login(@Body RequestBody body);
+    
+    @POST("/api/histories")
+    Call<ApiResponse<Void>> saveHistory(@Body RequestBody body);
 }

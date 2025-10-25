@@ -62,7 +62,6 @@ public class LoginActivity extends AppCompatActivity {
         String email = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
 
-        // Validation
         if (email.isEmpty()) {
             etEmail.setError("Email is required");
             etEmail.requestFocus();
@@ -75,23 +74,19 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        // Disable button while loading
         btnLogin.setEnabled(false);
         btnLogin.setText("Logging in...");
 
-        // Call repository
         authRepository.login(email, password, new AuthRepository.LoginCallback() {
             @Override
             public void onSuccess(String accessToken) {
                 Log.d(TAG, "Login successful, got access token");
 
-                // Decode JWT to get user ID
                 String userId = JwtDecoder.getUserIdFromToken(accessToken);
 
                 if (userId != null) {
                     Log.d(TAG, "Decoded user ID: " + userId);
 
-                    // Save to SharedPreferences
                     prefsManager.saveAccessToken(accessToken);
                     prefsManager.saveUserId(userId);
 

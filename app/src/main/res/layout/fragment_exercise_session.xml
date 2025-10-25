@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@android:color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- Exercise Title -->
+        <TextView
+            android:id="@+id/text_exercise_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Exercise Name"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="#111827"
+            android:fontFamily="sans-serif-medium" />
+
+        <!-- Exercise Number Info -->
+        <TextView
+            android:id="@+id/text_exercise_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Exercise 1 of 5"
+            android:textSize="14sp"
+            android:textColor="#6B7280" />
+
+        <!-- Sets Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Sets"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#111827" />
+
+        <RadioGroup
+            android:id="@+id/radio_group_sets"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="vertical">
+            <!-- Radio buttons will be dynamically added -->
+        </RadioGroup>
+
+        <!-- Tutorial Image/GIF -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Tutorial"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#111827" />
+
+        <ImageView
+            android:id="@+id/image_exercise_tutorial"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="12dp"
+            android:scaleType="centerCrop"
+            android:background="@drawable/bg_image_rounded"
+            android:contentDescription="Exercise tutorial" />
+
+        <!-- Instructions -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Instructions"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#111827" />
+
+        <TextView
+            android:id="@+id/text_exercise_instructions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Instructions will appear here..."
+            android:textSize="14sp"
+            android:textColor="#374151"
+            android:lineSpacingExtra="4dp" />
+
+    </LinearLayout>
+</ScrollView>

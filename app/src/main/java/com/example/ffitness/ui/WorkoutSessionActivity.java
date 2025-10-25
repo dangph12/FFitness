@@ -1,18 +1,49 @@
 package com.example.ffitness.ui;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.ffitness.R;
+import com.example.ffitness.model.Workout;
+import com.example.ffitness.model.WorkoutSession;
+import com.example.ffitness.repository.HistoryRepository;
+import com.example.ffitness.util.SharedPreferencesManager;
+
+import java.util.List;
+import java.util.Locale;
 
 public class WorkoutSessionActivity extends AppCompatActivity {
+
+    private static final String TAG = "WorkoutSessionActivity";
+
+    private TextView textTimer;
+    private Button btnFinishWorkout, btnAction;
+    
+    private List<WorkoutSession> workoutSessions;
+    private int currentExerciseIndex = 0;
+    private ExerciseSessionFragment currentFragment;
+    
+    private Handler timerHandler;
+    private Runnable timerRunnable;
+    private long startTime;
+    private long elapsedTime = 0;
+    
+    private HistoryRepository historyRepository;
+    private SharedPreferencesManager prefsManager;
+    private String workoutId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +59,152 @@ public class WorkoutSessionActivity extends AppCompatActivity {
         ImageButton btnBack = findViewById(R.id.btn_back);
         btnBack.setOnClickListener(v -> finish());
 
-        TextView textView = findViewById(R.id.text_view_workout_id);
-        String workoutId = getIntent().getStringExtra("workout_id");
-        textView.setText("Workout Session for ID: " + workoutId);
+        textTimer = findViewById(R.id.text_timer);
+        btnFinishWorkout = findViewById(R.id.btn_finish_workout);
+        btnAction = findViewById(R.id.btn_action);
+        
+        historyRepository = new HistoryRepository(getApplication());
+        prefsManager = new SharedPreferencesManager(this);
+
+        // Get workout data from intent
+        workoutId = getIntent().getStringExtra("workout_id");
+        Workout workout = (Workout) getIntent().getSerializableExtra("workout");
+        
+        if (workout != null && workout.getExercises() != null && !workout.getExercises().isEmpty()) {
+            workoutSessions = workout.getExercises();
+            loadExercise(0);
+        } else {
+            Toast.makeText(this, "No exercises found", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        startTimer();
+        btnFinishWorkout.setOnClickListener(v -> finishWorkout());
+        btnAction.setOnClickListener(v -> handleActionButton());
+    }
+
+    private void startTimer() {
+        startTime = System.currentTimeMillis();
+        timerHandler = new Handler(Looper.getMainLooper());
+        timerRunnable = new Runnable() {
+            @Override
+            public void run() {
+                elapsedTime = (System.currentTimeMillis() - startTime) / 1000; // seconds
+                updateTimerDisplay();
+                timerHandler.postDelayed(this, 1000);
+            }
+        };
+        timerHandler.post(timerRunnable);
+    }
+
+    private void updateTimerDisplay() {
+        long minutes = elapsedTime / 60;
+        long seconds = elapsedTime % 60;
+        textTimer.setText(String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds));
+    }
+
+    private void stopTimer() {
+        if (timerHandler != null && timerRunnable != null) {
+            timerHandler.removeCallbacks(timerRunnable);
+        }
+    }
+
+    private void loadExercise(int index) {
+        currentExerciseIndex = index;
+        WorkoutSession session = workoutSessions.get(index);
+        
+        currentFragment = ExerciseSessionFragment.newInstance(
+                session, 
+                index, 
+                workoutSessions.size()
+        );
+        
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, currentFragment);
+        transaction.commit();
+        
+        getSupportFragmentManager().executePendingTransactions();
+        updateActionButtonText();
+    }
+
+    private void handleActionButton() {
+        if (currentFragment == null) return;
+
+        boolean wasLastSet = currentFragment.isLastSet();
+        currentFragment.markSetCompleted();
+        if (wasLastSet) {
+            if (currentExerciseIndex < workoutSessions.size() - 1) {
+                loadExercise(currentExerciseIndex + 1);
+            } else {
+                finishWorkout();
+            }
+        } else {
+            updateActionButtonText();
+        }
+    }
+
+    private void updateActionButtonText() {
+        if (currentFragment == null) return;
+
+        boolean isLastSet = currentFragment.isLastSet();
+        boolean isLastExercise = currentExerciseIndex >= workoutSessions.size() - 1;
+
+        if (isLastSet) {
+            if (isLastExercise) {
+                btnAction.setText("Finish Workout");
+            } else {
+                btnAction.setText("Next Exercise");
+            }
+        } else {
+            btnAction.setText("Complete Set");
+        }
+    }
+
+    private void finishWorkout() {
+        stopTimer();
+        
+        String userId = prefsManager.getUserId();
+        if (userId == null || userId.isEmpty()) {
+            Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        Log.d(TAG, "Finishing workout. Time: " + elapsedTime + "s, User: " + userId + ", Workout: " + workoutId);
+
+        historyRepository.saveHistory(userId, workoutId, elapsedTime, new HistoryRepository.HistoryCallback() {
+            @Override
+            public void onSuccess() {
+                runOnUiThread(() -> {
+                    Toast.makeText(WorkoutSessionActivity.this, 
+                            "Workout completed! Time: " + formatTime(elapsedTime), 
+                            Toast.LENGTH_LONG).show();
+                    finish();
+                });
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                runOnUiThread(() -> {
+                    Toast.makeText(WorkoutSessionActivity.this, 
+                            "Failed to save workout: " + errorMessage, 
+                            Toast.LENGTH_LONG).show();
+                    finish();
+                });
+            }
+        });
+    }
+
+    private String formatTime(long seconds) {
+        long minutes = seconds / 60;
+        long secs = seconds % 60;
+        return String.format(Locale.getDefault(), "%02d:%02d", minutes, secs);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopTimer();
     }
 }

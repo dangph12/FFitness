@@ -22,13 +22,14 @@
         android:layout_height="0dp"
         android:fillViewport="true"
         app:layout_constraintTop_toBottomOf="@id/back_button_bar"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toTopOf="@id/button_start_workout">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="16dp"
+            android:paddingBottom="24dp">
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -108,21 +109,24 @@
                 android:nestedScrollingEnabled="false"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/row_exercise" />
-
-            <Button
-                android:id="@+id/button_start_workout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Start Workout"
-                android:textAllCaps="false"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
-                android:backgroundTint="#2563EB"
-                android:fontFamily="sans-serif-medium"
-                android:elevation="4dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="24dp" />
         </LinearLayout>
     </ScrollView>
+
+    <Button
+        android:id="@+id/button_start_workout"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_margin="16dp"
+        android:text="Start Workout"
+        android:textAllCaps="false"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textColor="@android:color/white"
+        android:backgroundTint="#2563EB"
+        android:fontFamily="sans-serif-medium"
+        android:elevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

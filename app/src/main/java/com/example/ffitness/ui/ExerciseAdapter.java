@@ -77,7 +77,6 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Exerci
             }
         }
 
-        // Set click listener
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onExerciseClick(session);
