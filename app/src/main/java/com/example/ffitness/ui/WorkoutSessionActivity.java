@@ -1,6 +1,7 @@
 package com.example.ffitness.ui;
 
 import android.os.Bundle;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -23,6 +24,9 @@ public class WorkoutSessionActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        ImageButton btnBack = findViewById(R.id.btn_back);
+        btnBack.setOnClickListener(v -> finish());
 
         TextView textView = findViewById(R.id.text_view_workout_id);
         String workoutId = getIntent().getStringExtra("workout_id");

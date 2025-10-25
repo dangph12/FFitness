@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -43,6 +44,13 @@ public class WorkoutDetailFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        ImageButton btnBack = view.findViewById(R.id.btn_back);
+        btnBack.setOnClickListener(v -> {
+            if (getActivity() != null) {
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
+        });
 
         imageWorkout = view.findViewById(R.id.image_workout_detail);
         textViewWorkoutTitle = view.findViewById(R.id.text_view_workout_title);

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -41,6 +42,9 @@ public class LoginActivity extends AppCompatActivity {
 
         prefsManager = new SharedPreferencesManager(this);
         authRepository = new AuthRepository(getApplication());
+
+        ImageButton btnBack = findViewById(R.id.btn_back);
+        btnBack.setOnClickListener(v -> finish());
 
         if (prefsManager.isLoggedIn()) {
             navigateToMain();

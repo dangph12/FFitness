@@ -7,6 +7,15 @@
     android:background="#F8FAFC"
     tools:context=".ui.WorkoutFragment">
 
+    <include
+        android:id="@+id/back_button_bar"
+        layout="@layout/back_button_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <LinearLayout
         android:id="@+id/header_container"
         android:layout_width="match_parent"
@@ -16,7 +25,7 @@
         android:paddingTop="48dp"
         android:paddingBottom="20dp"
         android:background="#F5F2EC"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/back_button_bar"
         android:elevation="6dp">
 
         <LinearLayout

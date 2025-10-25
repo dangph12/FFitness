@@ -9,6 +9,15 @@
     android:padding="24dp"
     tools:context=".ui.LoginActivity">
 
+    <include
+        android:id="@+id/back_button_bar"
+        layout="@layout/back_button_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <TextView
         android:id="@+id/textView_app_name"
         android:layout_width="wrap_content"
@@ -20,7 +29,7 @@
         app:layout_constraintBottom_toTopOf="@id/textView_welcome"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/back_button_bar"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
