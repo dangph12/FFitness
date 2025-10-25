@@ -66,11 +66,10 @@ public class WorkoutSessionActivity extends AppCompatActivity {
         historyRepository = new HistoryRepository(getApplication());
         prefsManager = new SharedPreferencesManager(this);
 
-        // Get workout data from intent
-        workoutId = getIntent().getStringExtra("workout_id");
         Workout workout = (Workout) getIntent().getSerializableExtra("workout");
         
         if (workout != null && workout.getExercises() != null && !workout.getExercises().isEmpty()) {
+            workoutId = workout.getId();
             workoutSessions = workout.getExercises();
             loadExercise(0);
         } else {

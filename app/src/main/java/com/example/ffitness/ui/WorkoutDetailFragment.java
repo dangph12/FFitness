@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.ffitness.MainActivity;
 import com.example.ffitness.R;
 import com.example.ffitness.model.Workout;
-import com.example.ffitness.repository.WorkoutRepository;
 
 public class WorkoutDetailFragment extends Fragment {
 
@@ -31,9 +30,15 @@ public class WorkoutDetailFragment extends Fragment {
     private Button buttonStartWorkout;
     private ExerciseAdapter exerciseAdapter;
 
-    private WorkoutRepository workoutRepository;
-    private String workoutId;
     private Workout currentWorkout;
+
+    public static WorkoutDetailFragment newInstance(Workout workout) {
+        WorkoutDetailFragment fragment = new WorkoutDetailFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("workout", workout);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Nullable
     @Override
@@ -60,7 +65,7 @@ public class WorkoutDetailFragment extends Fragment {
 
         recyclerViewExercises.setLayoutManager(new LinearLayoutManager(getContext()));
         exerciseAdapter = new ExerciseAdapter(workoutSession -> {
-            ExerciseDetailFragment detailFragment = ExerciseDetailFragment.newInstance(workoutSession.getExercise().getId());
+            ExerciseDetailFragment detailFragment = ExerciseDetailFragment.newInstance(workoutSession.getExercise());
             MainActivity mainActivity = (MainActivity) getActivity();
             if (mainActivity != null) {
                 mainActivity.navigateToFragment(detailFragment, true);
@@ -68,44 +73,24 @@ public class WorkoutDetailFragment extends Fragment {
         });
         recyclerViewExercises.setAdapter(exerciseAdapter);
 
-        workoutRepository = new WorkoutRepository(requireActivity().getApplication());
-
         if (getArguments() != null) {
-            workoutId = getArguments().getString("workout_id");
-            Log.d(TAG, "workout_id = " + workoutId);
-            if (workoutId != null) {
-                loadWorkoutDetails(workoutId);
+            currentWorkout = (Workout) getArguments().getSerializable("workout");
+            if (currentWorkout != null) {
+                Log.d(TAG, "Loaded workout: " + currentWorkout.getTitle());
+                bindWorkoutData(currentWorkout);
             }
         }
 
         buttonStartWorkout.setOnClickListener(v -> {
             if (currentWorkout != null) {
                 Intent intent = new Intent(getActivity(), WorkoutSessionActivity.class);
-                intent.putExtra("workout_id", workoutId);
                 intent.putExtra("workout", currentWorkout);
                 startActivity(intent);
             }
         });
     }
 
-    private void loadWorkoutDetails(String workoutId) {
-        workoutRepository.getWorkoutById(workoutId, new WorkoutRepository.WorkoutCallback() {
-            @Override
-            public void onSuccess(Workout workout) {
-                Log.d(TAG, "Loaded workout: " + workout.getTitle());
-                bindWorkoutData(workout);
-            }
-
-            @Override
-            public void onError(String errorMessage) {
-                Log.e(TAG, "Failed to load workout: " + errorMessage);
-            }
-        });
-    }
-
     private void bindWorkoutData(Workout workout) {
-        currentWorkout = workout;
-        
         textViewWorkoutTitle.setText(workout.getTitle());
         textViewCreator.setText(workout.getUser() != null
                 ? "by " + workout.getUser().getName()
@@ -121,13 +106,5 @@ public class WorkoutDetailFragment extends Fragment {
         } else {
             Log.w(TAG, "No exercises found");
         }
-    }
-
-    public static WorkoutDetailFragment newInstance(String workoutId) {
-        WorkoutDetailFragment fragment = new WorkoutDetailFragment();
-        Bundle args = new Bundle();
-        args.putString("workout_id", workoutId);
-        fragment.setArguments(args);
-        return fragment;
     }
 }

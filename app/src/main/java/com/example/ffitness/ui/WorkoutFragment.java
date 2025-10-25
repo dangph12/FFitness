@@ -58,7 +58,7 @@ public class WorkoutFragment extends Fragment {
         workoutRepository = new WorkoutRepository(requireActivity().getApplication());
         
         workoutAdapter = new WorkoutAdapter(workout -> {
-            WorkoutDetailFragment detailFragment = WorkoutDetailFragment.newInstance(workout.getId());
+            WorkoutDetailFragment detailFragment = WorkoutDetailFragment.newInstance(workout);
             MainActivity mainActivity = (MainActivity) getActivity();
             if (mainActivity != null) {
                 mainActivity.navigateToFragment(detailFragment, true);

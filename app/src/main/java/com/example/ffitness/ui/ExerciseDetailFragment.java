@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,7 +17,6 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.example.ffitness.R;
 import com.example.ffitness.model.Exercise;
-import com.example.ffitness.repository.ExerciseRepository;
 import com.example.ffitness.util.InstructionUtils;
 
 public class ExerciseDetailFragment extends Fragment {
@@ -29,13 +27,12 @@ public class ExerciseDetailFragment extends Fragment {
     private TextView textViewExerciseDescription;
     private ImageView imageViewExercise;
 
-    private ExerciseRepository exerciseRepository;
-    private String exerciseId;
+    private Exercise exercise;
 
-    public static ExerciseDetailFragment newInstance(String exerciseId) {
+    public static ExerciseDetailFragment newInstance(Exercise exercise) {
         ExerciseDetailFragment fragment = new ExerciseDetailFragment();
         Bundle args = new Bundle();
-        args.putString("exercise_id", exerciseId);
+        args.putSerializable("exercise", exercise);
         fragment.setArguments(args);
         return fragment;
     }
@@ -61,31 +58,14 @@ public class ExerciseDetailFragment extends Fragment {
         textViewExerciseDescription = view.findViewById(R.id.textView_exercise_description);
         imageViewExercise = view.findViewById(R.id.imageView_exercise);
 
-        exerciseRepository = new ExerciseRepository(requireActivity().getApplication());
-
         Bundle args = getArguments();
         if (args != null) {
-            exerciseId = args.getString("exercise_id");
-            if (exerciseId != null) {
-                loadExerciseDetails(exerciseId);
-            }
-        }
-    }
-
-    private void loadExerciseDetails(String exerciseId) {
-        exerciseRepository.getExerciseById(exerciseId, new ExerciseRepository.ExerciseCallback() {
-            @Override
-            public void onSuccess(Exercise exercise) {
+            exercise = (Exercise) args.getSerializable("exercise");
+            if (exercise != null) {
                 Log.d(TAG, "Loaded exercise: " + exercise.getTitle());
                 bindExerciseData(exercise);
             }
-
-            @Override
-            public void onError(String errorMessage) {
-                Log.e(TAG, "Failed to load exercise: " + errorMessage);
-                Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
-            }
-        });
+        }
     }
 
     private void bindExerciseData(Exercise exercise) {
