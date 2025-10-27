@@ -40,9 +40,22 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:layout_marginStart="12dp"
+            android:layout_marginEnd="8dp"
             app:layout_constraintStart_toEndOf="@id/image_workout"
             app:layout_constraintTop_toTopOf="@id/image_workout"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toStartOf="@id/btn_favorite" />
+
+        <ImageButton
+            android:id="@+id/btn_favorite"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_heart_outline"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Add to favorites"
+            android:padding="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/text_view_workout_title"
+            app:layout_constraintBottom_toBottomOf="@id/text_view_workout_title" />
 
         <TextView
             android:id="@+id/text_view_workout_creator"

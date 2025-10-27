@@ -24,9 +24,22 @@
         android:text="Profile"
         android:textSize="32sp"
         android:textStyle="bold"
+        android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/back_button_bar" />
+
+    <Button
+        android:id="@+id/btn_favorites"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:text="My Favorites"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textView_profile" />
 
     <Button
         android:id="@+id/btn_logout"
@@ -35,9 +48,9 @@
         android:text="Logout"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView_profile" />
+        app:layout_constraintTop_toBottomOf="@id/btn_favorites" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
