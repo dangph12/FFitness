@@ -22,9 +22,9 @@ import java.util.Set;
 public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutViewHolder> {
 
     private List<Workout> workouts;
-    private OnWorkoutClickListener listener;
-    private OnFavoriteClickListener favoriteListener;
-    private Set<String> favoriteWorkoutIds = new HashSet<>();
+    private final OnWorkoutClickListener listener;
+    private final OnFavoriteClickListener favoriteListener;
+    private final Set<String> favoriteWorkoutIds = new HashSet<>();
 
     public boolean isFavorite(String workoutId) {
         return workoutId != null && favoriteWorkoutIds.contains(workoutId);
@@ -36,12 +36,6 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
 
     public interface OnFavoriteClickListener {
         void onFavoriteClick(Workout workout, int position);
-    }
-
-    public WorkoutAdapter(OnWorkoutClickListener listener) {
-        this.workouts = new ArrayList<>();
-        this.listener = listener;
-        this.favoriteListener = null;
     }
 
     public WorkoutAdapter(OnWorkoutClickListener listener, OnFavoriteClickListener favoriteListener) {
@@ -59,27 +53,6 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
         favoriteWorkoutIds.clear();
         if (ids != null) favoriteWorkoutIds.addAll(ids);
         notifyDataSetChanged();
-    }
-
-    public void setFavoriteStateForWorkout(String workoutId, boolean isFavorite) {
-        if (workoutId == null) return;
-        boolean changed;
-        if (isFavorite) changed = favoriteWorkoutIds.add(workoutId);
-        else changed = favoriteWorkoutIds.remove(workoutId);
-
-        if (changed) {
-            int pos = findPositionByWorkoutId(workoutId);
-            if (pos >= 0) notifyItemChanged(pos);
-        }
-    }
-
-    private int findPositionByWorkoutId(String workoutId) {
-        if (workoutId == null) return -1;
-        for (int i = 0; i < workouts.size(); i++) {
-            Workout w = workouts.get(i);
-            if (w != null && workoutId.equals(w.getId())) return i;
-        }
-        return -1;
     }
 
     public void addWorkouts(List<Workout> newWorkouts) {
@@ -139,10 +112,13 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
         return workouts.size();
     }
 
-    class WorkoutViewHolder extends RecyclerView.ViewHolder {
-        private ImageView imageWorkout;
-        private TextView textTitle, textCreator, textVisibility, textDetails;
-        private ImageButton btnFavorite;
+    static class WorkoutViewHolder extends RecyclerView.ViewHolder {
+        private final ImageView imageWorkout;
+        private final TextView textTitle;
+        private final TextView textCreator;
+        private final TextView textVisibility;
+        private final TextView textDetails;
+        private final ImageButton btnFavorite;
 
         public WorkoutViewHolder(@NonNull View itemView) {
             super(itemView);

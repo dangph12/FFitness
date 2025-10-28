@@ -28,7 +28,7 @@ public class FavoriteRepository {
 
     public void getFavoritesByUserId(String userId, int page, int limit, FavoritesCallback callback) {
         apiService.getApiClient().getFavoritesByUserId(userId, page, limit)
-                .enqueue(new Callback<ApiResponse<FavoriteResponse>>() {
+                .enqueue(new Callback<>() {
                     @Override
                     public void onResponse(@NonNull Call<ApiResponse<FavoriteResponse>> call,
                                            @NonNull Response<ApiResponse<FavoriteResponse>> response) {
@@ -36,11 +36,11 @@ public class FavoriteRepository {
                             ApiResponse<FavoriteResponse> apiResponse = response.body();
                             if (apiResponse.getData() != null) {
                                 FavoriteResponse favoriteResponse = apiResponse.getData();
-                                
+
                                 // Calculate currentPage and hasNextPage on client side 
                                 // since backend doesn't provide them
                                 favoriteResponse.calculatePaginationFields(page);
-                                
+
                                 callback.onSuccess(favoriteResponse);
                             } else {
                                 callback.onError("Failed to load favorites: No data in response");
@@ -66,7 +66,7 @@ public class FavoriteRepository {
         RequestBody requestBody = RequestBody.create(json, MediaType.parse("application/json"));
 
         apiService.getApiClient().addFavorite(requestBody)
-                .enqueue(new Callback<ApiResponse<Void>>() {
+                .enqueue(new Callback<>() {
                     @Override
                     public void onResponse(@NonNull Call<ApiResponse<Void>> call,
                                            @NonNull Response<ApiResponse<Void>> response) {
@@ -89,7 +89,7 @@ public class FavoriteRepository {
 
     public void removeFavorite(String favoriteId, FavoriteActionCallback callback) {
         apiService.getApiClient().removeFavorite(favoriteId)
-                .enqueue(new Callback<ApiResponse<Void>>() {
+                .enqueue(new Callback<>() {
                     @Override
                     public void onResponse(@NonNull Call<ApiResponse<Void>> call,
                                            @NonNull Response<ApiResponse<Void>> response) {

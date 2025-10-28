@@ -33,7 +33,7 @@ public class HistoryRepository {
 
         Log.d(TAG, "Saving history: " + json);
 
-        apiService.getApiClient().saveHistory(body).enqueue(new Callback<ApiResponse<Void>>() {
+        apiService.getApiClient().saveHistory(body).enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<ApiResponse<Void>> call, @NonNull Response<ApiResponse<Void>> response) {
                 if (response.isSuccessful() && response.body() != null) {

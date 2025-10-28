@@ -22,22 +22,19 @@ public class ApiService {
 
     private ApiService(Context context) {
 
-        Interceptor authInterceptor = new Interceptor() {
-            @Override
-            public Response intercept(Chain chain) throws IOException {
-                SharedPreferences sharedPreferences = context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE);
-                String authToken = sharedPreferences.getString("AUTH_TOKEN", null);
+        Interceptor authInterceptor = chain -> {
+            SharedPreferences sharedPreferences = context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE);
+            String authToken = sharedPreferences.getString("AUTH_TOKEN", null);
 
-                Request originalRequest = chain.request();
-                Request.Builder builder = originalRequest.newBuilder();
+            Request originalRequest = chain.request();
+            Request.Builder builder = originalRequest.newBuilder();
 
-                if (authToken != null && !authToken.isEmpty()) {
-                    builder.header("Authorization", "Bearer " + authToken);
-                }
-
-                Request newRequest = builder.build();
-                return chain.proceed(newRequest);
+            if (authToken != null && !authToken.isEmpty()) {
+                builder.header("Authorization", "Bearer " + authToken);
             }
+
+            Request newRequest = builder.build();
+            return chain.proceed(newRequest);
         };
 
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();

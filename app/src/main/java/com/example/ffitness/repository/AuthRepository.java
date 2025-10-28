@@ -3,6 +3,8 @@ package com.example.ffitness.repository;
 import android.app.Application;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.example.ffitness.api.ApiResponse;
 import com.example.ffitness.api.ApiService;
 import com.example.ffitness.dto.response.AuthResponse;
@@ -40,12 +42,12 @@ public class AuthRepository {
             );
 
             Call<ApiResponse<AuthResponse>> call = ApiService.getInstance(application).getApiClient().login(body);
-            call.enqueue(new Callback<ApiResponse<AuthResponse>>() {
+            call.enqueue(new Callback<>() {
                 @Override
-                public void onResponse(Call<ApiResponse<AuthResponse>> call, Response<ApiResponse<AuthResponse>> response) {
+                public void onResponse(@NonNull Call<ApiResponse<AuthResponse>> call, @NonNull Response<ApiResponse<AuthResponse>> response) {
                     if (response.isSuccessful() && response.body() != null) {
                         ApiResponse<AuthResponse> apiResponse = response.body();
-                        
+
                         if (apiResponse.getData() != null && apiResponse.getData().getAccessToken() != null) {
                             String accessToken = apiResponse.getData().getAccessToken();
                             Log.d(TAG, "Login successful");
@@ -71,7 +73,7 @@ public class AuthRepository {
                 }
 
                 @Override
-                public void onFailure(Call<ApiResponse<AuthResponse>> call, Throwable t) {
+                public void onFailure(@NonNull Call<ApiResponse<AuthResponse>> call, @NonNull Throwable t) {
                     Log.e(TAG, "Login error: " + t.getMessage(), t);
                     callback.onError("Network error: " + t.getMessage());
                 }

@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -26,8 +25,6 @@ public class WorkoutDetailFragment extends Fragment {
     private static final String TAG = "WorkoutDetailFragment";
 
     private TextView textViewWorkoutTitle, textViewCreator, textViewVisibility;
-    private RecyclerView recyclerViewExercises;
-    private Button buttonStartWorkout;
     private ExerciseAdapter exerciseAdapter;
 
     private Workout currentWorkout;
@@ -60,8 +57,8 @@ public class WorkoutDetailFragment extends Fragment {
         textViewWorkoutTitle = view.findViewById(R.id.text_view_workout_title);
         textViewCreator = view.findViewById(R.id.text_view_creator);
         textViewVisibility = view.findViewById(R.id.text_view_visibility);
-        recyclerViewExercises = view.findViewById(R.id.recycler_view_exercises);
-        buttonStartWorkout = view.findViewById(R.id.button_start_workout);
+        RecyclerView recyclerViewExercises = view.findViewById(R.id.recycler_view_exercises);
+        Button buttonStartWorkout = view.findViewById(R.id.button_start_workout);
 
         recyclerViewExercises.setLayoutManager(new LinearLayoutManager(getContext()));
         exerciseAdapter = new ExerciseAdapter(workoutSession -> {

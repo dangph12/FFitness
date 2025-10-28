@@ -45,7 +45,7 @@ public class FavoriteFragment extends Fragment {
     private int totalPages = 1;
     private boolean isLoading = false;
     
-    private List<String> favoriteIds = new ArrayList<>();
+    private final List<String> favoriteIds = new ArrayList<>();
 
     @Nullable
     @Override
@@ -81,9 +81,7 @@ public class FavoriteFragment extends Fragment {
                     mainActivity.navigateToFragment(detailFragment, true);
                 }
             },
-            (workout, position) -> {
-                removeFavorite(position);
-            }
+            (workout, position) -> removeFavorite(position)
         );
         recyclerView.setAdapter(workoutAdapter);
 

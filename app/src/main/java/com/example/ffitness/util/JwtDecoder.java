@@ -4,6 +4,8 @@ import android.util.Base64;
 
 import org.json.JSONObject;
 
+import java.nio.charset.StandardCharsets;
+
 public class JwtDecoder {
     
     public static String getUserIdFromToken(String token) {
@@ -15,7 +17,7 @@ public class JwtDecoder {
             
             String payload = parts[1];
             byte[] decodedBytes = Base64.decode(payload, Base64.DEFAULT);
-            String decodedString = new String(decodedBytes, "UTF-8");
+            String decodedString = new String(decodedBytes, StandardCharsets.UTF_8);
             JSONObject jsonObject = new JSONObject(decodedString);
             
             if (jsonObject.has("id")) {

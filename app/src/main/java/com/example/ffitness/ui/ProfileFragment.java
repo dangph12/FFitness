@@ -19,7 +19,6 @@ import com.example.ffitness.util.SharedPreferencesManager;
 
 public class ProfileFragment extends Fragment {
 
-    private Button btnLogout, btnFavorites;
     private SharedPreferencesManager prefsManager;
 
     @Nullable
@@ -42,8 +41,8 @@ public class ProfileFragment extends Fragment {
         });
         
         prefsManager = new SharedPreferencesManager(requireContext());
-        btnLogout = view.findViewById(R.id.btn_logout);
-        btnFavorites = view.findViewById(R.id.btn_favorites);
+        Button btnLogout = view.findViewById(R.id.btn_logout);
+        Button btnFavorites = view.findViewById(R.id.btn_favorites);
         
         btnFavorites.setOnClickListener(v -> {
             MainActivity mainActivity = (MainActivity) getActivity();

@@ -114,10 +114,6 @@ public class ExerciseSessionFragment extends Fragment {
         });
     }
 
-    public int getCurrentSetIndex() {
-        return currentSetIndex;
-    }
-
     public int getTotalSets() {
         return workoutSession != null && workoutSession.getSets() != null 
                 ? workoutSession.getSets().length 

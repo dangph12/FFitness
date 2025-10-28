@@ -20,7 +20,7 @@ import java.util.List;
 public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ExerciseViewHolder> {
 
     private List<WorkoutSession> sessions = new ArrayList<>();
-    private OnExerciseClickListener listener;
+    private final OnExerciseClickListener listener;
 
     public interface OnExerciseClickListener {
         void onExerciseClick(WorkoutSession workoutSession);

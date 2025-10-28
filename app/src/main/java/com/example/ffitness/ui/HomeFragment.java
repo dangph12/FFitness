@@ -15,8 +15,6 @@ import com.example.ffitness.R;
 
 public class HomeFragment extends Fragment {
 
-    private Button btnGoToLogin;
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -26,8 +24,8 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        
-        btnGoToLogin = view.findViewById(R.id.btn_go_to_login);
+
+        Button btnGoToLogin = view.findViewById(R.id.btn_go_to_login);
         
         if (btnGoToLogin != null) {
             btnGoToLogin.setOnClickListener(v -> {

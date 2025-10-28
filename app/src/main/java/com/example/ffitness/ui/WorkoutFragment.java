@@ -30,7 +30,6 @@ public class WorkoutFragment extends Fragment {
     private static final String TAG = "WorkoutFragment";
     private static final int PAGE_SIZE = 10;
 
-    private RecyclerView recyclerView;
     private WorkoutAdapter workoutAdapter;
     private WorkoutRepository workoutRepository;
     private FavoriteRepository favoriteRepository;
@@ -60,7 +59,7 @@ public class WorkoutFragment extends Fragment {
             }
         });
 
-        recyclerView = view.findViewById(R.id.recycler_view_workouts);
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_view_workouts);
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 

@@ -27,8 +27,6 @@ public class ExerciseDetailFragment extends Fragment {
     private TextView textViewExerciseDescription;
     private ImageView imageViewExercise;
 
-    private Exercise exercise;
-
     public static ExerciseDetailFragment newInstance(Exercise exercise) {
         ExerciseDetailFragment fragment = new ExerciseDetailFragment();
         Bundle args = new Bundle();
@@ -60,7 +58,7 @@ public class ExerciseDetailFragment extends Fragment {
 
         Bundle args = getArguments();
         if (args != null) {
-            exercise = (Exercise) args.getSerializable("exercise");
+            Exercise exercise = (Exercise) args.getSerializable("exercise");
             if (exercise != null) {
                 Log.d(TAG, "Loaded exercise: " + exercise.getTitle());
                 bindExerciseData(exercise);

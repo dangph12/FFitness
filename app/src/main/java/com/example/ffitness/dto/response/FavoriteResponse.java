@@ -37,8 +37,4 @@ public class FavoriteResponse {
         this.currentPage = requestedPage;
         this.hasNextPage = currentPage < totalPages;
     }
-
-    public boolean hasNextPage() {
-        return hasNextPage;
-    }
 }

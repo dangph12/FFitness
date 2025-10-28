@@ -30,7 +30,7 @@ public class WorkoutSessionActivity extends AppCompatActivity {
     private static final String TAG = "WorkoutSessionActivity";
 
     private TextView textTimer;
-    private Button btnFinishWorkout, btnAction;
+    private Button btnAction;
     
     private List<WorkoutSession> workoutSessions;
     private int currentExerciseIndex = 0;
@@ -60,7 +60,7 @@ public class WorkoutSessionActivity extends AppCompatActivity {
         btnBack.setOnClickListener(v -> finish());
 
         textTimer = findViewById(R.id.text_timer);
-        btnFinishWorkout = findViewById(R.id.btn_finish_workout);
+        Button btnFinishWorkout = findViewById(R.id.btn_finish_workout);
         btnAction = findViewById(R.id.btn_action);
         
         historyRepository = new HistoryRepository(getApplication());

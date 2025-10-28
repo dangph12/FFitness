@@ -3,6 +3,8 @@ package com.example.ffitness.repository;
 import android.app.Application;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.example.ffitness.api.ApiResponse;
 import com.example.ffitness.api.ApiService;
 import com.example.ffitness.dto.response.WorkoutResponse;
@@ -35,12 +37,12 @@ public class WorkoutRepository {
                 .getApiClient()
                 .getWorkouts(page, limit);
         
-        call.enqueue(new Callback<ApiResponse<WorkoutResponse>>() {
+        call.enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<ApiResponse<WorkoutResponse>> call, Response<ApiResponse<WorkoutResponse>> response) {
+            public void onResponse(@NonNull Call<ApiResponse<WorkoutResponse>> call, @NonNull Response<ApiResponse<WorkoutResponse>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     ApiResponse<WorkoutResponse> apiResponse = response.body();
-                    
+
                     if (apiResponse.getData() != null) {
                         Log.d(TAG, "Loaded workouts page " + page);
                         callback.onSuccess(apiResponse.getData());
@@ -53,7 +55,7 @@ public class WorkoutRepository {
             }
 
             @Override
-            public void onFailure(Call<ApiResponse<WorkoutResponse>> call, Throwable t) {
+            public void onFailure(@NonNull Call<ApiResponse<WorkoutResponse>> call, @NonNull Throwable t) {
                 Log.e(TAG, "Error loading workouts: " + t.getMessage(), t);
                 callback.onError("Network error: " + t.getMessage());
             }
@@ -65,12 +67,12 @@ public class WorkoutRepository {
                 .getApiClient()
                 .getWorkoutById(id);
         
-        call.enqueue(new Callback<ApiResponse<Workout>>() {
+        call.enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<ApiResponse<Workout>> call, Response<ApiResponse<Workout>> response) {
+            public void onResponse(@NonNull Call<ApiResponse<Workout>> call, @NonNull Response<ApiResponse<Workout>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     ApiResponse<Workout> apiResponse = response.body();
-                    
+
                     if (apiResponse.getData() != null) {
                         Log.d(TAG, "Loaded workout: " + apiResponse.getData().getTitle());
                         callback.onSuccess(apiResponse.getData());
@@ -83,7 +85,7 @@ public class WorkoutRepository {
             }
 
             @Override
-            public void onFailure(Call<ApiResponse<Workout>> call, Throwable t) {
+            public void onFailure(@NonNull Call<ApiResponse<Workout>> call, @NonNull Throwable t) {
                 Log.e(TAG, "Error loading workout: " + t.getMessage(), t);
                 callback.onError("Network error: " + t.getMessage());
             }
