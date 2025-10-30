@@ -25,6 +25,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
     private final OnWorkoutClickListener listener;
     private final OnFavoriteClickListener favoriteListener;
     private final Map<String, String> workoutToFavoriteMap = new HashMap<>();
+    private final Map<String, Long> workoutToDurationMap = new HashMap<>();
     private List<Workout> workouts;
 
     public WorkoutAdapter(OnWorkoutClickListener listener, OnFavoriteClickListener favoriteListener) {
@@ -42,6 +43,22 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
         workoutToFavoriteMap.clear();
         if (workoutIdToFavoriteId != null) {
             workoutToFavoriteMap.putAll(workoutIdToFavoriteId);
+        }
+        notifyDataSetChanged();
+    }
+
+    public void setWorkoutDurations(Map<String, Long> workoutIdToDuration) {
+        workoutToDurationMap.clear();
+        if (workoutIdToDuration != null) {
+            workoutToDurationMap.putAll(workoutIdToDuration);
+        }
+        notifyDataSetChanged();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void updateWorkoutDurations(Map<String, Long> newMappings) {
+        if (newMappings != null) {
+            workoutToDurationMap.putAll(newMappings);
         }
         notifyDataSetChanged();
     }
@@ -119,6 +136,12 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
             boolean isFav = workout.getId() != null && workoutToFavoriteMap.containsKey(workout.getId());
             holder.btnFavorite.setImageResource(isFav ? R.drawable.ic_heart_filled : R.drawable.ic_heart_outline);
         }
+
+        // Set duration from mapping if available (show/hide handled in ViewHolder)
+        if (holder.textDuration != null) {
+            Long duration = workout.getId() != null ? workoutToDurationMap.get(workout.getId()) : null;
+            holder.setDuration(duration);
+        }
     }
 
     @Override
@@ -140,6 +163,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
         private final TextView textCreator;
         private final TextView textVisibility;
         private final TextView textDetails;
+        private final TextView textDuration;
         private final ImageButton btnFavorite;
 
         public WorkoutViewHolder(@NonNull View itemView) {
@@ -150,6 +174,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
             textVisibility = itemView.findViewById(R.id.text_view_visibility);
             textDetails = itemView.findViewById(R.id.text_view_workout_details);
             btnFavorite = itemView.findViewById(R.id.btn_favorite);
+            textDuration = itemView.findViewById(R.id.text_view_workout_duration);
         }
 
         public void bind(Workout workout) {
@@ -174,6 +199,47 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
             } else {
                 imageWorkout.setImageResource(R.drawable.logo);
             }
+
+            if (textDuration != null) {
+                textDuration.setVisibility(View.GONE);
+            }
+        }
+
+        public void setDuration(Long durationInSeconds) {
+            if (textDuration == null) return;
+
+            if (durationInSeconds == null || durationInSeconds <= 0) {
+                textDuration.setVisibility(View.GONE);
+                return;
+            }
+
+            long secs = durationInSeconds;
+            long hours = secs / 3600;
+            long minutes = (secs % 3600) / 60;
+            long seconds = secs % 60;
+
+            String text;
+            if (hours > 0) {
+                // show hours and optional minutes: "1h 5m"
+                if (minutes > 0) {
+                    text = hours + "h " + minutes + "m";
+                } else {
+                    text = hours + "h";
+                }
+            } else if (minutes > 0) {
+                // show minutes and optional seconds: "5m 30s" or "5m"
+                if (seconds > 0) {
+                    text = minutes + "m " + seconds + "s";
+                } else {
+                    text = minutes + "m";
+                }
+            } else {
+                // less than a minute -> show seconds: "4s"
+                text = seconds + "s";
+            }
+
+            textDuration.setText(text);
+            textDuration.setVisibility(View.VISIBLE);
         }
     }
 }

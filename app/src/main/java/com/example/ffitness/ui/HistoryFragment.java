@@ -192,17 +192,25 @@ public class HistoryFragment extends Fragment {
                 currentPage = page;
 
                 List<Workout> workouts = new ArrayList<>();
+                Map<String, Long> workoutDurations = new HashMap<>();
 
                 for (History history: historyResponse.getHistories()) {
                     if (history.getWorkout() != null) {
                         workouts.add(history.getWorkout());
+                        if (history.getWorkout().getId() != null) {
+                            workoutDurations.put(history.getWorkout().getId(), history.getTime());
+                        }
                     }
                 }
 
                 if (page == 1) {
                     workoutAdapter.setWorkouts(workouts);
+                    // set durations for page 1
+                    workoutAdapter.setWorkoutDurations(workoutDurations);
                 } else {
                     workoutAdapter.addWorkouts(workouts);
+                    // update durations for additional pages
+                    workoutAdapter.updateWorkoutDurations(workoutDurations);
                 }
             }
 
