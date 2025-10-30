@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
 public class HistoryRequest {
     @SerializedName("user")
     private String user;
-    
+
     @SerializedName("workout")
     private String workout;
-    
+
     @SerializedName("time")
     private long time; // time in seconds or milliseconds
 }

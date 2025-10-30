@@ -23,7 +23,7 @@ public class HistoryFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        
+
         ImageButton btnBack = view.findViewById(R.id.btn_back);
         btnBack.setOnClickListener(v -> {
             com.example.ffitness.MainActivity mainActivity = (com.example.ffitness.MainActivity) getActivity();
@@ -32,7 +32,7 @@ public class HistoryFragment extends Fragment {
                 mainActivity.navigateToFragment(new HomeFragment(), false);
             }
         });
-        
+
         // TODO: Initialize views and setup logic
     }
 }

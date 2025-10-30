@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import com.example.ffitness.api.ApiResponse;
 import com.example.ffitness.api.ApiService;
 import com.example.ffitness.dto.request.HistoryRequest;
+import com.example.ffitness.model.History;
 import com.google.gson.Gson;
 
 import okhttp3.MediaType;
@@ -24,9 +25,9 @@ public class HistoryRepository {
         this.apiService = ApiService.getInstance(application);
     }
 
-    public void saveHistory(String userId, String workoutId, long timeInSeconds, HistoryCallback callback) {
+    public void saveHistory(String userId, String workoutId, long timeInSeconds, HistoryActionCallback callback) {
         HistoryRequest request = new HistoryRequest(userId, workoutId, timeInSeconds);
-        
+
         Gson gson = new Gson();
         String json = gson.toJson(request);
         RequestBody body = RequestBody.create(json, MediaType.get("application/json"));
@@ -35,7 +36,7 @@ public class HistoryRepository {
 
         apiService.getApiClient().saveHistory(body).enqueue(new Callback<>() {
             @Override
-            public void onResponse(@NonNull Call<ApiResponse<Void>> call, @NonNull Response<ApiResponse<Void>> response) {
+            public void onResponse(@NonNull Call<ApiResponse<History>> call, @NonNull Response<ApiResponse<History>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d(TAG, "History saved successfully");
                     callback.onSuccess();
@@ -47,7 +48,7 @@ public class HistoryRepository {
             }
 
             @Override
-            public void onFailure(@NonNull Call<ApiResponse<Void>> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<ApiResponse<History>> call, @NonNull Throwable t) {
                 String error = "Network error: " + t.getMessage();
                 Log.e(TAG, error, t);
                 callback.onError(error);
@@ -55,8 +56,9 @@ public class HistoryRepository {
         });
     }
 
-    public interface HistoryCallback {
+    public interface HistoryActionCallback {
         void onSuccess();
+
         void onError(String errorMessage);
     }
 }

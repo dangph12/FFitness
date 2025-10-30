@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FavoriteRequest {
-    
+
     @SerializedName("user")
     private String user;
-    
+
     @SerializedName("workout")
     private String workout;
 }

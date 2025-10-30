@@ -7,23 +7,23 @@ import org.json.JSONObject;
 import java.nio.charset.StandardCharsets;
 
 public class JwtDecoder {
-    
+
     public static String getUserIdFromToken(String token) {
         try {
             String[] parts = token.split("\\.");
             if (parts.length < 2) {
                 return null;
             }
-            
+
             String payload = parts[1];
             byte[] decodedBytes = Base64.decode(payload, Base64.DEFAULT);
             String decodedString = new String(decodedBytes, StandardCharsets.UTF_8);
             JSONObject jsonObject = new JSONObject(decodedString);
-            
+
             if (jsonObject.has("id")) {
                 return jsonObject.getString("id");
             }
-            
+
             return null;
         } catch (Exception e) {
             e.printStackTrace();

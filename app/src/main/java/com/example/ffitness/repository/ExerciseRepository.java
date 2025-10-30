@@ -22,16 +22,6 @@ public class ExerciseRepository {
         this.application = application;
     }
 
-    public interface ExercisesCallback {
-        void onSuccess(ExerciseResponse exerciseResponse);
-        void onError(String errorMessage);
-    }
-
-    public interface ExerciseCallback {
-        void onSuccess(Exercise exercise);
-        void onError(String errorMessage);
-    }
-
     public void getExercises(ExercisesCallback callback) {
         Call<ApiResponse<ExerciseResponse>> call = ApiService.getInstance(application)
                 .getApiClient()
@@ -90,5 +80,17 @@ public class ExerciseRepository {
                 callback.onError("Network error: " + t.getMessage());
             }
         });
+    }
+
+    public interface ExercisesCallback {
+        void onSuccess(ExerciseResponse exerciseResponse);
+
+        void onError(String errorMessage);
+    }
+
+    public interface ExerciseCallback {
+        void onSuccess(Exercise exercise);
+
+        void onError(String errorMessage);
     }
 }

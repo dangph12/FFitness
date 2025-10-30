@@ -31,16 +31,16 @@ public class WorkoutSessionActivity extends AppCompatActivity {
 
     private TextView textTimer;
     private Button btnAction;
-    
+
     private List<WorkoutSession> workoutSessions;
     private int currentExerciseIndex = 0;
     private ExerciseSessionFragment currentFragment;
-    
+
     private Handler timerHandler;
     private Runnable timerRunnable;
     private long startTime;
     private long elapsedTime = 0;
-    
+
     private HistoryRepository historyRepository;
     private SharedPreferencesManager prefsManager;
     private String workoutId;
@@ -62,12 +62,12 @@ public class WorkoutSessionActivity extends AppCompatActivity {
         textTimer = findViewById(R.id.text_timer);
         Button btnFinishWorkout = findViewById(R.id.btn_finish_workout);
         btnAction = findViewById(R.id.btn_action);
-        
+
         historyRepository = new HistoryRepository(getApplication());
         prefsManager = new SharedPreferencesManager(this);
 
         Workout workout = (Workout) getIntent().getSerializableExtra("workout");
-        
+
         if (workout != null && workout.getExercises() != null && !workout.getExercises().isEmpty()) {
             workoutId = workout.getId();
             workoutSessions = workout.getExercises();
@@ -112,17 +112,17 @@ public class WorkoutSessionActivity extends AppCompatActivity {
     private void loadExercise(int index) {
         currentExerciseIndex = index;
         WorkoutSession session = workoutSessions.get(index);
-        
+
         currentFragment = ExerciseSessionFragment.newInstance(
-                session, 
-                index, 
+                session,
+                index,
                 workoutSessions.size()
         );
-        
+
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, currentFragment);
         transaction.commit();
-        
+
         getSupportFragmentManager().executePendingTransactions();
         updateActionButtonText();
     }
@@ -162,7 +162,7 @@ public class WorkoutSessionActivity extends AppCompatActivity {
 
     private void finishWorkout() {
         stopTimer();
-        
+
         String userId = prefsManager.getUserId();
         if (userId == null || userId.isEmpty()) {
             Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
@@ -172,12 +172,12 @@ public class WorkoutSessionActivity extends AppCompatActivity {
 
         Log.d(TAG, "Finishing workout. Time: " + elapsedTime + "s, User: " + userId + ", Workout: " + workoutId);
 
-        historyRepository.saveHistory(userId, workoutId, elapsedTime, new HistoryRepository.HistoryCallback() {
+        historyRepository.saveHistory(userId, workoutId, elapsedTime, new HistoryRepository.HistoryActionCallback() {
             @Override
             public void onSuccess() {
                 runOnUiThread(() -> {
-                    Toast.makeText(WorkoutSessionActivity.this, 
-                            "Workout completed! Time: " + formatTime(elapsedTime), 
+                    Toast.makeText(WorkoutSessionActivity.this,
+                            "Workout completed! Time: " + formatTime(elapsedTime),
                             Toast.LENGTH_LONG).show();
                     finish();
                 });
@@ -186,8 +186,8 @@ public class WorkoutSessionActivity extends AppCompatActivity {
             @Override
             public void onError(String errorMessage) {
                 runOnUiThread(() -> {
-                    Toast.makeText(WorkoutSessionActivity.this, 
-                            "Failed to save workout: " + errorMessage, 
+                    Toast.makeText(WorkoutSessionActivity.this,
+                            "Failed to save workout: " + errorMessage,
                             Toast.LENGTH_LONG).show();
                     finish();
                 });

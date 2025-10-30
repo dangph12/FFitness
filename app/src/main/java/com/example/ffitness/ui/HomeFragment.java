@@ -26,7 +26,7 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         Button btnGoToLogin = view.findViewById(R.id.btn_go_to_login);
-        
+
         if (btnGoToLogin != null) {
             btnGoToLogin.setOnClickListener(v -> {
                 Intent intent = new Intent(getActivity(), LoginActivity.class);

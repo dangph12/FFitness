@@ -69,7 +69,7 @@ public class ExerciseSessionFragment extends Fragment {
 
     private void bindExerciseData() {
         Exercise exercise = workoutSession.getExercise();
-        
+
         textExerciseTitle.setText(exercise.getTitle());
         textExerciseInfo.setText("Exercise " + (exerciseIndex + 1) + " of " + totalExercises);
 
@@ -98,7 +98,7 @@ public class ExerciseSessionFragment extends Fragment {
                 radioButton.setId(View.generateViewId());
                 radioGroupSets.addView(radioButton);
             }
-            
+
             if (radioGroupSets.getChildCount() > 0) {
                 ((RadioButton) radioGroupSets.getChildAt(0)).setChecked(true);
             }
@@ -115,8 +115,8 @@ public class ExerciseSessionFragment extends Fragment {
     }
 
     public int getTotalSets() {
-        return workoutSession != null && workoutSession.getSets() != null 
-                ? workoutSession.getSets().length 
+        return workoutSession != null && workoutSession.getSets() != null
+                ? workoutSession.getSets().length
                 : 0;
     }
 
@@ -130,7 +130,7 @@ public class ExerciseSessionFragment extends Fragment {
             RadioButton currentRadio = (RadioButton) radioGroupSets.getChildAt(currentSetIndex);
             currentRadio.setEnabled(false);
             currentRadio.setAlpha(0.5f);
-            
+
             if (currentSetIndex + 1 < radioGroupSets.getChildCount()) {
                 RadioButton nextRadio = (RadioButton) radioGroupSets.getChildAt(currentSetIndex + 1);
                 nextRadio.setChecked(true);

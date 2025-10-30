@@ -19,12 +19,8 @@ import java.util.List;
 
 public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ExerciseViewHolder> {
 
-    private List<WorkoutSession> sessions = new ArrayList<>();
     private final OnExerciseClickListener listener;
-
-    public interface OnExerciseClickListener {
-        void onExerciseClick(WorkoutSession workoutSession);
-    }
+    private List<WorkoutSession> sessions = new ArrayList<>();
 
     public ExerciseAdapter(OnExerciseClickListener listener) {
         this.listener = listener;
@@ -87,6 +83,10 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Exerci
     @Override
     public int getItemCount() {
         return sessions != null ? sessions.size() : 0;
+    }
+
+    public interface OnExerciseClickListener {
+        void onExerciseClick(WorkoutSession workoutSession);
     }
 
     public static class ExerciseViewHolder extends RecyclerView.ViewHolder {

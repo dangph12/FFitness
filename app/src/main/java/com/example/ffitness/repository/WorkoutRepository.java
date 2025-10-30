@@ -22,21 +22,11 @@ public class WorkoutRepository {
         this.application = application;
     }
 
-    public interface WorkoutsCallback {
-        void onSuccess(WorkoutResponse workoutResponse);
-        void onError(String errorMessage);
-    }
-
-    public interface WorkoutCallback {
-        void onSuccess(Workout workout);
-        void onError(String errorMessage);
-    }
-
     public void getWorkouts(int page, int limit, WorkoutsCallback callback) {
         Call<ApiResponse<WorkoutResponse>> call = ApiService.getInstance(application)
                 .getApiClient()
                 .getWorkouts(page, limit);
-        
+
         call.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<ApiResponse<WorkoutResponse>> call, @NonNull Response<ApiResponse<WorkoutResponse>> response) {
@@ -66,7 +56,7 @@ public class WorkoutRepository {
         Call<ApiResponse<Workout>> call = ApiService.getInstance(application)
                 .getApiClient()
                 .getWorkoutById(id);
-        
+
         call.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<ApiResponse<Workout>> call, @NonNull Response<ApiResponse<Workout>> response) {
@@ -90,5 +80,17 @@ public class WorkoutRepository {
                 callback.onError("Network error: " + t.getMessage());
             }
         });
+    }
+
+    public interface WorkoutsCallback {
+        void onSuccess(WorkoutResponse workoutResponse);
+
+        void onError(String errorMessage);
+    }
+
+    public interface WorkoutCallback {
+        void onSuccess(Workout workout);
+
+        void onError(String errorMessage);
     }
 }

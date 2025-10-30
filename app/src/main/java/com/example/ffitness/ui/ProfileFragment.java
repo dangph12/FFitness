@@ -30,7 +30,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        
+
         ImageButton btnBack = view.findViewById(R.id.btn_back);
         btnBack.setOnClickListener(v -> {
             com.example.ffitness.MainActivity mainActivity = (com.example.ffitness.MainActivity) getActivity();
@@ -39,27 +39,27 @@ public class ProfileFragment extends Fragment {
                 mainActivity.navigateToFragment(new HomeFragment(), false);
             }
         });
-        
+
         prefsManager = new SharedPreferencesManager(requireContext());
         Button btnLogout = view.findViewById(R.id.btn_logout);
         Button btnFavorites = view.findViewById(R.id.btn_favorites);
-        
+
         btnFavorites.setOnClickListener(v -> {
             MainActivity mainActivity = (MainActivity) getActivity();
             if (mainActivity != null) {
                 mainActivity.navigateToFragment(new FavoriteFragment(), true);
             }
         });
-        
+
         btnLogout.setOnClickListener(v -> {
             prefsManager.clear();
-            
+
             Toast.makeText(requireContext(), "Logged out successfully", Toast.LENGTH_SHORT).show();
-            
+
             Intent intent = new Intent(getActivity(), MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
-            
+
             if (getActivity() != null) {
                 getActivity().finish();
             }

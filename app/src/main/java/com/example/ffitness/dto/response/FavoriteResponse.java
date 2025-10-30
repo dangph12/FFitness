@@ -30,7 +30,7 @@ public class FavoriteResponse {
     /**
      * Calculate currentPage and hasNextPage based on request parameters
      * Call this after receiving response from API
-     * 
+     *
      * @param requestedPage The page number that was requested in the API call
      */
     public void calculatePaginationFields(int requestedPage) {

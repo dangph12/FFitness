@@ -23,7 +23,7 @@ import com.example.ffitness.util.SharedPreferencesManager;
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
-    
+
     private EditText etEmail, etPassword;
     private Button btnLogin;
     private SharedPreferencesManager prefsManager;
@@ -54,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.et_email);
         etPassword = findViewById(R.id.et_password);
         btnLogin = findViewById(R.id.btn_login);
-        
+
         btnLogin.setOnClickListener(v -> login());
     }
 

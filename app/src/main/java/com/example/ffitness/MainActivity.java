@@ -10,8 +10,8 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.ffitness.ui.HomeFragment;
 import com.example.ffitness.ui.HistoryFragment;
+import com.example.ffitness.ui.HomeFragment;
 import com.example.ffitness.ui.ProfileFragment;
 import com.example.ffitness.ui.WorkoutFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -34,10 +34,10 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             loadFragment(new HomeFragment());
         }
-        
+
         bottomNavigationView.setOnItemSelectedListener(item -> {
             Fragment selectedFragment = null;
-            
+
             int itemId = item.getItemId();
             if (itemId == R.id.navigation_home) {
                 selectedFragment = new HomeFragment();
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
             } else if (itemId == R.id.navigation_profile) {
                 selectedFragment = new ProfileFragment();
             }
-            
+
             if (selectedFragment != null) {
                 loadFragment(selectedFragment);
                 return true;
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
     }
-    
+
     public void navigateToFragment(Fragment fragment, boolean addToBackStack) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, fragment);

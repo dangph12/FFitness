@@ -25,11 +25,6 @@ public class AuthRepository {
         this.application = application;
     }
 
-    public interface LoginCallback {
-        void onSuccess(String accessToken);
-        void onError(String errorMessage);
-    }
-
     public void login(String email, String password, LoginCallback callback) {
         try {
             JSONObject jsonBody = new JSONObject();
@@ -37,8 +32,8 @@ public class AuthRepository {
             jsonBody.put("password", password);
 
             RequestBody body = RequestBody.create(
-                jsonBody.toString(),
-                MediaType.get("application/json")
+                    jsonBody.toString(),
+                    MediaType.get("application/json")
             );
 
             Call<ApiResponse<AuthResponse>> call = ApiService.getInstance(application).getApiClient().login(body);
@@ -83,5 +78,11 @@ public class AuthRepository {
             Log.e(TAG, "Error creating request: " + e.getMessage(), e);
             callback.onError("Error: " + e.getMessage());
         }
+    }
+
+    public interface LoginCallback {
+        void onSuccess(String accessToken);
+
+        void onError(String errorMessage);
     }
 }
