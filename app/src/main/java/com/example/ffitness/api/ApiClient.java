@@ -4,6 +4,7 @@ package com.example.ffitness.api;
 import com.example.ffitness.dto.response.AuthResponse;
 import com.example.ffitness.dto.response.ExerciseResponse;
 import com.example.ffitness.dto.response.FavoriteResponse;
+import com.example.ffitness.dto.response.HistoryResponse;
 import com.example.ffitness.dto.response.WorkoutResponse;
 import com.example.ffitness.model.Exercise;
 import com.example.ffitness.model.Favorite;
@@ -40,6 +41,13 @@ public interface ApiClient {
 
     @POST("/api/histories")
     Call<ApiResponse<History>> saveHistory(@Body RequestBody body);
+
+    @GET("/api/histories/user/{userId}")
+    Call<ApiResponse<HistoryResponse>> getHistoriesByUserId(
+            @Path("userId") String userId,
+            @Query("page") int page,
+            @Query("limit") int limit
+    );
 
     @GET("/api/favorites/user/{userId}")
     Call<ApiResponse<FavoriteResponse>> getFavoritesByUserId(

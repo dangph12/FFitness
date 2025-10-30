@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 import com.example.ffitness.api.ApiResponse;
 import com.example.ffitness.api.ApiService;
 import com.example.ffitness.dto.request.HistoryRequest;
+import com.example.ffitness.dto.response.FavoriteResponse;
+import com.example.ffitness.dto.response.HistoryResponse;
 import com.example.ffitness.model.History;
 import com.google.gson.Gson;
 
@@ -25,7 +27,40 @@ public class HistoryRepository {
         this.apiService = ApiService.getInstance(application);
     }
 
-    public void saveHistory(String userId, String workoutId, long timeInSeconds, HistoryActionCallback callback) {
+    public void getHistoriesByUserId(String userId, int page, int limit, HistoryCallback callback) {
+        apiService.getApiClient().getHistoriesByUserId(userId, page, limit)
+                .enqueue(new Callback<>() {
+                    @Override
+                    public void onResponse(@NonNull Call<ApiResponse<HistoryResponse>> call,
+                                           @NonNull Response<ApiResponse<HistoryResponse>> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            ApiResponse<HistoryResponse> apiResponse = response.body();
+                            if (apiResponse.getData() != null) {
+                                HistoryResponse historyResponse = apiResponse.getData();
+
+                                // Calculate currentPage and hasNextPage on client side
+                                // since backend doesn't provide them
+                                historyResponse.calculatePaginationFields(page);
+
+                                callback.onSuccess(historyResponse);
+                            } else {
+                                callback.onError("Failed to load favorites: No data in response");
+                            }
+                        } else {
+                            callback.onError("Failed to load favorites: " + response.code());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<ApiResponse<HistoryResponse>> call,
+                                          @NonNull Throwable t) {
+                        Log.e(TAG, "Error loading favorites", t);
+                        callback.onError("Network error: " + t.getMessage());
+                    }
+                });
+    }
+
+    public void saveHistory(String userId, String workoutId, long timeInSeconds, HistoryAddCallback callback) {
         HistoryRequest request = new HistoryRequest(userId, workoutId, timeInSeconds);
 
         Gson gson = new Gson();
@@ -39,7 +74,8 @@ public class HistoryRepository {
             public void onResponse(@NonNull Call<ApiResponse<History>> call, @NonNull Response<ApiResponse<History>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d(TAG, "History saved successfully");
-                    callback.onSuccess();
+                    History history = response.body().getData();
+                    callback.onSuccess(history);
                 } else {
                     String error = "Failed to save history: " + response.code();
                     Log.e(TAG, error);
@@ -56,8 +92,14 @@ public class HistoryRepository {
         });
     }
 
-    public interface HistoryActionCallback {
-        void onSuccess();
+    public interface HistoryAddCallback {
+        void onSuccess(History history);
+
+        void onError(String errorMessage);
+    }
+
+    public interface HistoryCallback {
+        void onSuccess(HistoryResponse historyResponse);
 
         void onError(String errorMessage);
     }

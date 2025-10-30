@@ -17,6 +17,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.ffitness.R;
+import com.example.ffitness.model.History;
 import com.example.ffitness.model.Workout;
 import com.example.ffitness.model.WorkoutSession;
 import com.example.ffitness.repository.HistoryRepository;
@@ -172,9 +173,9 @@ public class WorkoutSessionActivity extends AppCompatActivity {
 
         Log.d(TAG, "Finishing workout. Time: " + elapsedTime + "s, User: " + userId + ", Workout: " + workoutId);
 
-        historyRepository.saveHistory(userId, workoutId, elapsedTime, new HistoryRepository.HistoryActionCallback() {
+        historyRepository.saveHistory(userId, workoutId, elapsedTime, new HistoryRepository.HistoryAddCallback() {
             @Override
-            public void onSuccess() {
+            public void onSuccess(History history) {
                 runOnUiThread(() -> {
                     Toast.makeText(WorkoutSessionActivity.this,
                             "Workout completed! Time: " + formatTime(elapsedTime),
