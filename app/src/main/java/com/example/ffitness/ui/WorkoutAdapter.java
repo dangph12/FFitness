@@ -1,5 +1,6 @@
 package com.example.ffitness.ui;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,28 +16,16 @@ import com.example.ffitness.R;
 import com.example.ffitness.model.Workout;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutViewHolder> {
 
-    private List<Workout> workouts;
     private final OnWorkoutClickListener listener;
     private final OnFavoriteClickListener favoriteListener;
-    private final Set<String> favoriteWorkoutIds = new HashSet<>();
-
-    public boolean isFavorite(String workoutId) {
-        return workoutId != null && favoriteWorkoutIds.contains(workoutId);
-    }
-
-    public interface OnWorkoutClickListener {
-        void onWorkoutClick(Workout workout);
-    }
-
-    public interface OnFavoriteClickListener {
-        void onFavoriteClick(Workout workout, int position);
-    }
+    private final Map<String, String> workoutToFavoriteMap = new HashMap<>();
+    private List<Workout> workouts;
 
     public WorkoutAdapter(OnWorkoutClickListener listener, OnFavoriteClickListener favoriteListener) {
         this.workouts = new ArrayList<>();
@@ -49,10 +38,34 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
         notifyDataSetChanged();
     }
 
-    public void setFavoriteIds(Set<String> ids) {
-        favoriteWorkoutIds.clear();
-        if (ids != null) favoriteWorkoutIds.addAll(ids);
+    public void setFavoriteMapping(Map<String, String> workoutIdToFavoriteId) {
+        workoutToFavoriteMap.clear();
+        if (workoutIdToFavoriteId != null) {
+            workoutToFavoriteMap.putAll(workoutIdToFavoriteId);
+        }
         notifyDataSetChanged();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void updateFavoriteMapping(Map<String, String> newMappings) {
+        if (newMappings != null) {
+            workoutToFavoriteMap.putAll(newMappings);
+        }
+        notifyDataSetChanged();
+    }
+
+    public void removeFavorite(String workoutId) {
+        if (workoutId != null) {
+            workoutToFavoriteMap.remove(workoutId);
+            notifyDataSetChanged();
+        }
+    }
+
+    public void addFavorite(String workoutId, String favoriteId) {
+        if (workoutId != null && favoriteId != null) {
+            workoutToFavoriteMap.put(workoutId, favoriteId);
+            notifyDataSetChanged();
+        }
     }
 
     public void addWorkouts(List<Workout> newWorkouts) {
@@ -63,6 +76,10 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
 
     public void removeWorkout(int position) {
         if (position >= 0 && position < workouts.size()) {
+            Workout workout = workouts.get(position);
+            if (workout.getId() != null) {
+                workoutToFavoriteMap.remove(workout.getId());
+            }
             workouts.remove(position);
             notifyItemRemoved(position);
         }
@@ -80,29 +97,26 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
     public void onBindViewHolder(@NonNull WorkoutViewHolder holder, int position) {
         Workout workout = workouts.get(position);
         holder.bind(workout);
-        
+
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onWorkoutClick(workout);
             }
         });
 
-        // Handle favorite button click if listener is provided
         if (holder.btnFavorite != null) {
-            // Always show the favorite button in the row so the UI is consistent.
-            // If a listener is provided, make it clickable. Otherwise show it
-            // disabled (non-clickable) so the icon doesn't disappear unexpectedly.
             holder.btnFavorite.setVisibility(View.VISIBLE);
             if (favoriteListener != null) {
                 holder.btnFavorite.setEnabled(true);
-                holder.btnFavorite.setOnClickListener(v -> favoriteListener.onFavoriteClick(workout, position));
+                String favoriteId = workoutToFavoriteMap.get(workout.getId());
+                holder.btnFavorite.setOnClickListener(v ->
+                        favoriteListener.onFavoriteClick(workout, position, favoriteId));
             } else {
                 holder.btnFavorite.setEnabled(false);
                 holder.btnFavorite.setOnClickListener(null);
             }
 
-            // Update icon (filled or outline) based on favorite state
-            boolean isFav = workout.getId() != null && favoriteWorkoutIds.contains(workout.getId());
+            boolean isFav = workout.getId() != null && workoutToFavoriteMap.containsKey(workout.getId());
             holder.btnFavorite.setImageResource(isFav ? R.drawable.ic_heart_filled : R.drawable.ic_heart_outline);
         }
     }
@@ -110,6 +124,14 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
     @Override
     public int getItemCount() {
         return workouts.size();
+    }
+
+    public interface OnWorkoutClickListener {
+        void onWorkoutClick(Workout workout);
+    }
+
+    public interface OnFavoriteClickListener {
+        void onFavoriteClick(Workout workout, int position, String favoriteId);
     }
 
     static class WorkoutViewHolder extends RecyclerView.ViewHolder {

@@ -24,9 +24,9 @@ import com.example.ffitness.repository.FavoriteRepository;
 import com.example.ffitness.util.SharedPreferencesManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Map;
 
 public class FavoriteFragment extends Fragment {
 
@@ -36,7 +36,7 @@ public class FavoriteFragment extends Fragment {
     private RecyclerView recyclerView;
     private WorkoutAdapter workoutAdapter;
     private TextView textEmpty;
-    
+
     private FavoriteRepository favoriteRepository;
     private SharedPreferencesManager prefsManager;
     private LinearLayoutManager layoutManager;
@@ -44,8 +44,6 @@ public class FavoriteFragment extends Fragment {
     private int currentPage = 1;
     private int totalPages = 1;
     private boolean isLoading = false;
-    
-    private final List<String> favoriteIds = new ArrayList<>();
 
     @Nullable
     @Override
@@ -56,32 +54,36 @@ public class FavoriteFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        
+
         ImageButton btnBack = view.findViewById(R.id.btn_back);
         btnBack.setOnClickListener(v -> {
             if (getActivity() != null) {
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         });
-        
+
         recyclerView = view.findViewById(R.id.recycler_view_favorites);
         textEmpty = view.findViewById(R.id.text_empty);
-        
+
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        
+
         favoriteRepository = new FavoriteRepository(requireActivity().getApplication());
         prefsManager = new SharedPreferencesManager(requireContext());
-        
+
         workoutAdapter = new WorkoutAdapter(
-            workout -> {
-                WorkoutDetailFragment detailFragment = WorkoutDetailFragment.newInstance(workout);
-                MainActivity mainActivity = (MainActivity) getActivity();
-                if (mainActivity != null) {
-                    mainActivity.navigateToFragment(detailFragment, true);
+                workout -> {
+                    WorkoutDetailFragment detailFragment = WorkoutDetailFragment.newInstance(workout);
+                    MainActivity mainActivity = (MainActivity) getActivity();
+                    if (mainActivity != null) {
+                        mainActivity.navigateToFragment(detailFragment, true);
+                    }
+                },
+                (workout, position, favoriteId) -> {
+                    if (favoriteId != null) {
+                        removeFavorite(favoriteId, position);
+                    }
                 }
-            },
-            (workout, position) -> removeFavorite(position)
         );
         recyclerView.setAdapter(workoutAdapter);
 
@@ -90,11 +92,11 @@ public class FavoriteFragment extends Fragment {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                
+
                 int visibleItemCount = layoutManager.getChildCount();
                 int totalItemCount = layoutManager.getItemCount();
                 int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
-                
+
                 if (!isLoading && currentPage < totalPages) {
                     if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount - 2) {
                         loadFavorites(currentPage + 1);
@@ -102,7 +104,7 @@ public class FavoriteFragment extends Fragment {
                 }
             }
         });
-        
+
         loadFavorites(1);
     }
 
@@ -114,40 +116,31 @@ public class FavoriteFragment extends Fragment {
         }
 
         isLoading = true;
-        
+
         favoriteRepository.getFavoritesByUserId(userId, page, PAGE_SIZE, new FavoriteRepository.FavoritesCallback() {
             @Override
             public void onSuccess(FavoriteResponse response) {
                 isLoading = false;
                 totalPages = response.getTotalPages();
                 currentPage = page;
-                
+
                 List<Favorite> favorites = response.getFavorites();
                 List<Workout> workouts = new ArrayList<>();
-                
-                // Extract workouts from favorites and store favorite IDs (both favorite entry ids and workout ids)
-                if (page == 1) {
-                    favoriteIds.clear();
-                }
-
-                Set<String> favoriteWorkoutIds = new HashSet<>();
+                Map<String, String> workoutToFavoriteMap = new HashMap<>();
 
                 for (Favorite favorite : favorites) {
                     if (favorite.getWorkout() != null) {
                         workouts.add(favorite.getWorkout());
-                        favoriteIds.add(favorite.getId());
                         if (favorite.getWorkout().getId() != null) {
-                            favoriteWorkoutIds.add(favorite.getWorkout().getId());
+                            workoutToFavoriteMap.put(favorite.getWorkout().getId(), favorite.getId());
                         }
                     }
                 }
-                
+
                 if (page == 1) {
                     workoutAdapter.setWorkouts(workouts);
-                    // Tell adapter which workout ids are favorites so it can show filled hearts
-                    workoutAdapter.setFavoriteIds(favoriteWorkoutIds);
-                    
-                    // Show/hide empty state
+                    workoutAdapter.setFavoriteMapping(workoutToFavoriteMap);
+
                     if (workouts.isEmpty()) {
                         textEmpty.setVisibility(View.VISIBLE);
                         recyclerView.setVisibility(View.GONE);
@@ -156,9 +149,9 @@ public class FavoriteFragment extends Fragment {
                         recyclerView.setVisibility(View.VISIBLE);
                     }
                 } else {
+                    // For pagination, add new workouts and update mappings
                     workoutAdapter.addWorkouts(workouts);
-                    // For added pages, merge favorite workout ids as well
-                    workoutAdapter.setFavoriteIds(favoriteWorkoutIds);
+                    workoutAdapter.updateFavoriteMapping(workoutToFavoriteMap);
                 }
             }
 
@@ -171,23 +164,14 @@ public class FavoriteFragment extends Fragment {
         });
     }
 
-    private void removeFavorite(int position) {
-        if (position < 0 || position >= favoriteIds.size()) {
-            return;
-        }
-
-        String favoriteId = favoriteIds.get(position);
-        
-        favoriteRepository.removeFavorite(favoriteId, new FavoriteRepository.FavoriteActionCallback() {
+    private void removeFavorite(String favoriteId, int position) {
+        favoriteRepository.removeFavorite(favoriteId, new FavoriteRepository.FavoriteRemoveCallback() {
             @Override
             public void onSuccess() {
-                // Remove from adapter and favoriteIds list
-                favoriteIds.remove(position);
                 workoutAdapter.removeWorkout(position);
-                
+
                 Toast.makeText(getContext(), "Removed from favorites", Toast.LENGTH_SHORT).show();
-                
-                // Check if list is empty after removal
+
                 if (workoutAdapter.getItemCount() == 0) {
                     textEmpty.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.GONE);

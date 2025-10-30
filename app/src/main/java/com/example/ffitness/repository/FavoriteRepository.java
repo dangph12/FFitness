@@ -9,6 +9,7 @@ import com.example.ffitness.api.ApiResponse;
 import com.example.ffitness.api.ApiService;
 import com.example.ffitness.dto.request.FavoriteRequest;
 import com.example.ffitness.dto.response.FavoriteResponse;
+import com.example.ffitness.model.Favorite;
 import com.google.gson.Gson;
 
 import okhttp3.MediaType;
@@ -59,27 +60,28 @@ public class FavoriteRepository {
                 });
     }
 
-    public void addFavorite(String userId, String workoutId, FavoriteActionCallback callback) {
+    public void addFavorite(String userId, String workoutId, FavoriteAddCallback callback) {
         FavoriteRequest favoriteRequest = new FavoriteRequest(userId, workoutId);
-        
+
         String json = new Gson().toJson(favoriteRequest);
         RequestBody requestBody = RequestBody.create(json, MediaType.parse("application/json"));
 
         apiService.getApiClient().addFavorite(requestBody)
                 .enqueue(new Callback<>() {
                     @Override
-                    public void onResponse(@NonNull Call<ApiResponse<Void>> call,
-                                           @NonNull Response<ApiResponse<Void>> response) {
+                    public void onResponse(@NonNull Call<ApiResponse<Favorite>> call,
+                                           @NonNull Response<ApiResponse<Favorite>> response) {
                         if (response.isSuccessful() && response.body() != null) {
                             Log.d(TAG, "Favorite added successfully");
-                            callback.onSuccess();
+                            Favorite favorite = response.body().getData();
+                            callback.onSuccess(favorite);
                         } else {
                             callback.onError("Failed to add favorite: " + response.code());
                         }
                     }
 
                     @Override
-                    public void onFailure(@NonNull Call<ApiResponse<Void>> call,
+                    public void onFailure(@NonNull Call<ApiResponse<Favorite>> call,
                                           @NonNull Throwable t) {
                         Log.e(TAG, "Error adding favorite", t);
                         callback.onError("Network error: " + t.getMessage());
@@ -87,7 +89,7 @@ public class FavoriteRepository {
                 });
     }
 
-    public void removeFavorite(String favoriteId, FavoriteActionCallback callback) {
+    public void removeFavorite(String favoriteId, FavoriteRemoveCallback callback) {
         apiService.getApiClient().removeFavorite(favoriteId)
                 .enqueue(new Callback<>() {
                     @Override
@@ -112,11 +114,19 @@ public class FavoriteRepository {
 
     public interface FavoritesCallback {
         void onSuccess(FavoriteResponse favoriteResponse);
+
         void onError(String errorMessage);
     }
 
-    public interface FavoriteActionCallback {
+    public interface FavoriteAddCallback {
+        void onSuccess(Favorite favorite);
+
+        void onError(String errorMessage);
+    }
+
+    public interface FavoriteRemoveCallback {
         void onSuccess();
+
         void onError(String errorMessage);
     }
 }

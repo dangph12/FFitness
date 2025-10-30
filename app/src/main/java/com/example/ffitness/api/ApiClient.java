@@ -6,6 +6,8 @@ import com.example.ffitness.dto.response.ExerciseResponse;
 import com.example.ffitness.dto.response.FavoriteResponse;
 import com.example.ffitness.dto.response.WorkoutResponse;
 import com.example.ffitness.model.Exercise;
+import com.example.ffitness.model.Favorite;
+import com.example.ffitness.model.History;
 import com.example.ffitness.model.Workout;
 
 import okhttp3.RequestBody;
@@ -29,26 +31,26 @@ public interface ApiClient {
             @Query("page") int page,
             @Query("limit") int limit
     );
-    
+
     @GET("/api/workouts/{id}")
     Call<ApiResponse<Workout>> getWorkoutById(@Path("id") String id);
-    
+
     @POST("/api/auth/login")
     Call<ApiResponse<AuthResponse>> login(@Body RequestBody body);
-    
+
     @POST("/api/histories")
-    Call<ApiResponse<Void>> saveHistory(@Body RequestBody body);
-    
+    Call<ApiResponse<History>> saveHistory(@Body RequestBody body);
+
     @GET("/api/favorites/user/{userId}")
     Call<ApiResponse<FavoriteResponse>> getFavoritesByUserId(
             @Path("userId") String userId,
             @Query("page") int page,
             @Query("limit") int limit
     );
-    
+
     @POST("/api/favorites")
-    Call<ApiResponse<Void>> addFavorite(@Body RequestBody body);
-    
+    Call<ApiResponse<Favorite>> addFavorite(@Body RequestBody body);
+
     @DELETE("/api/favorites/{favoriteId}")
     Call<ApiResponse<Void>> removeFavorite(@Path("favoriteId") String favoriteId);
 }

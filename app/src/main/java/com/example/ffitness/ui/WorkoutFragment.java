@@ -15,15 +15,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ffitness.MainActivity;
 import com.example.ffitness.R;
-import com.example.ffitness.dto.response.WorkoutResponse;
-import com.example.ffitness.repository.WorkoutRepository;
-import com.example.ffitness.repository.FavoriteRepository;
-import com.example.ffitness.util.SharedPreferencesManager;
 import com.example.ffitness.dto.response.FavoriteResponse;
+import com.example.ffitness.dto.response.WorkoutResponse;
 import com.example.ffitness.model.Favorite;
+import com.example.ffitness.repository.FavoriteRepository;
+import com.example.ffitness.repository.WorkoutRepository;
+import com.example.ffitness.util.SharedPreferencesManager;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 public class WorkoutFragment extends Fragment {
 
@@ -68,52 +68,47 @@ public class WorkoutFragment extends Fragment {
         prefsManager = new SharedPreferencesManager(requireContext());
 
         workoutAdapter = new WorkoutAdapter(
-            workout -> {
-                WorkoutDetailFragment detailFragment = WorkoutDetailFragment.newInstance(workout);
-                MainActivity mainActivity = (MainActivity) getActivity();
-                if (mainActivity != null) {
-                    mainActivity.navigateToFragment(detailFragment, true);
-                }
-            },
-            (workout, position) -> {
-                String userId = prefsManager.getUserId();
-                if (userId == null || userId.isEmpty()) {
-                    return;
-                }
-                boolean isFavorite = workoutAdapter != null && workoutAdapter.isFavorite(workout.getId());
-                if (isFavorite) {
-                    favoriteRepository.getFavoritesByUserId(userId, 1, 100, new FavoriteRepository.FavoritesCallback() {
-                        @Override
-                        public void onSuccess(FavoriteResponse response) {
-                            for (Favorite fav : response.getFavorites()) {
-                                if (fav.getWorkout() != null && workout.getId().equals(fav.getWorkout().getId())) {
-                                    favoriteRepository.removeFavorite(fav.getId(), new FavoriteRepository.FavoriteActionCallback() {
-                                        @Override
-                                        public void onSuccess() {
-                                            reloadFavoritesAndUpdateAdapter(userId);
-                                        }
-                                        @Override
-                                        public void onError(String errorMessage) {}
-                                    });
-                                    break;
-                                }
+                workout -> {
+                    WorkoutDetailFragment detailFragment = WorkoutDetailFragment.newInstance(workout);
+                    MainActivity mainActivity = (MainActivity) getActivity();
+                    if (mainActivity != null) {
+                        mainActivity.navigateToFragment(detailFragment, true);
+                    }
+                },
+                (workout, position, favoriteId) -> {
+                    String userId = prefsManager.getUserId();
+                    if (userId == null || userId.isEmpty()) {
+                        return;
+                    }
+
+                    if (favoriteId != null) {
+                        favoriteRepository.removeFavorite(favoriteId, new FavoriteRepository.FavoriteRemoveCallback() {
+                            @Override
+                            public void onSuccess() {
+                                workoutAdapter.removeFavorite(workout.getId());
+                                Log.d(TAG, "Favorite removed successfully");
                             }
-                        }
-                        @Override
-                        public void onError(String errorMessage) {}
-                    });
-                } else {
-                    // Add favorite
-                    favoriteRepository.addFavorite(userId, workout.getId(), new FavoriteRepository.FavoriteActionCallback() {
-                        @Override
-                        public void onSuccess() {
-                            reloadFavoritesAndUpdateAdapter(userId);
-                        }
-                        @Override
-                        public void onError(String errorMessage) {}
-                    });
+
+                            @Override
+                            public void onError(String errorMessage) {
+                                Log.e(TAG, "Failed to remove favorite: " + errorMessage);
+                            }
+                        });
+                    } else {
+                        favoriteRepository.addFavorite(userId, workout.getId(), new FavoriteRepository.FavoriteAddCallback() {
+                            @Override
+                            public void onSuccess(Favorite favorite) {
+                                workoutAdapter.addFavorite(workout.getId(), favorite.getId());
+                                Log.d(TAG, "Favorite added successfully");
+                            }
+
+                            @Override
+                            public void onError(String errorMessage) {
+                                Log.e(TAG, "Failed to add favorite: " + errorMessage);
+                            }
+                        });
+                    }
                 }
-            }
         );
         recyclerView.setAdapter(workoutAdapter);
 
@@ -138,29 +133,30 @@ public class WorkoutFragment extends Fragment {
         // Load favorites first, then workouts
         String userId = prefsManager.getUserId();
         if (userId != null && !userId.isEmpty()) {
-            reloadFavoritesAndUpdateAdapter(userId);
+            loadFavorites(userId);
+            loadWorkouts(1);
         } else {
             loadWorkouts(1);
         }
     }
 
-    private void reloadFavoritesAndUpdateAdapter(String userId) {
+    private void loadFavorites(String userId) {
+        // Load all favorites for the user by getting first 100 favorites
         favoriteRepository.getFavoritesByUserId(userId, 1, 100, new FavoriteRepository.FavoritesCallback() {
             @Override
             public void onSuccess(FavoriteResponse response) {
-                Set<String> favoriteWorkoutIds = new HashSet<>();
+                Map<String, String> workoutToFavoriteMap = new HashMap<>();
                 for (Favorite fav : response.getFavorites()) {
                     if (fav.getWorkout() != null && fav.getWorkout().getId() != null) {
-                        favoriteWorkoutIds.add(fav.getWorkout().getId());
+                        workoutToFavoriteMap.put(fav.getWorkout().getId(), fav.getId());
                     }
                 }
-                workoutAdapter.setFavoriteIds(favoriteWorkoutIds);
-                // Now load workouts
-                loadWorkouts(1);
+                workoutAdapter.setFavoriteMapping(workoutToFavoriteMap);
             }
+
             @Override
             public void onError(String errorMessage) {
-                loadWorkouts(1);
+                Log.e(TAG, "Failed to load favorites: " + errorMessage);
             }
         });
     }
@@ -168,17 +164,17 @@ public class WorkoutFragment extends Fragment {
     private void loadWorkouts(int page) {
         isLoading = true;
         Log.d(TAG, "Loading workouts page: " + page);
-        
+
         workoutRepository.getWorkouts(page, PAGE_SIZE, new WorkoutRepository.WorkoutsCallback() {
             @Override
             public void onSuccess(WorkoutResponse workoutResponse) {
                 isLoading = false;
                 totalPages = workoutResponse.getTotalPages();
                 currentPage = page;
-                
+
                 Log.d(TAG, "Loaded page " + page + " of " + totalPages);
                 Log.d(TAG, "Workouts in page: " + workoutResponse.getWorkouts().size());
-                
+
                 if (page == 1) {
                     workoutAdapter.setWorkouts(workoutResponse.getWorkouts());
                 } else {
