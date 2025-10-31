@@ -122,7 +122,7 @@ public class ExerciseSessionFragment extends Fragment {
 
     public boolean isLastSet() {
         int totalSets = getTotalSets();
-        return totalSets > 0 && currentSetIndex == totalSets;
+        return totalSets > 0 && currentSetIndex >= totalSets;
     }
 
     public void markSetCompleted() {
@@ -131,10 +131,11 @@ public class ExerciseSessionFragment extends Fragment {
             currentRadio.setEnabled(false);
             currentRadio.setAlpha(0.5f);
 
-            if (currentSetIndex + 1 < radioGroupSets.getChildCount()) {
-                RadioButton nextRadio = (RadioButton) radioGroupSets.getChildAt(currentSetIndex + 1);
+            currentSetIndex++;
+
+            if (currentSetIndex < radioGroupSets.getChildCount()) {
+                RadioButton nextRadio = (RadioButton) radioGroupSets.getChildAt(currentSetIndex);
                 nextRadio.setChecked(true);
-                currentSetIndex++;
             }
         }
     }

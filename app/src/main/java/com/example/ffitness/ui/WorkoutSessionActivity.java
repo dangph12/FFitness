@@ -131,9 +131,9 @@ public class WorkoutSessionActivity extends AppCompatActivity {
     private void handleActionButton() {
         if (currentFragment == null) return;
 
-        boolean wasLastSet = currentFragment.isLastSet();
         currentFragment.markSetCompleted();
-        if (wasLastSet) {
+
+        if (currentFragment.isLastSet()) {
             if (currentExerciseIndex < workoutSessions.size() - 1) {
                 loadExercise(currentExerciseIndex + 1);
             } else {
