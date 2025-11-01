@@ -17,6 +17,7 @@ import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -61,4 +62,7 @@ public interface ApiClient {
 
     @DELETE("/api/favorites/{favoriteId}")
     Call<ApiResponse<Void>> removeFavorite(@Path("favoriteId") String favoriteId);
+
+    @PUT("/api/users/onboarding")
+    Call<ApiResponse<Void>> completeOnboarding(@Body RequestBody body);
 }
