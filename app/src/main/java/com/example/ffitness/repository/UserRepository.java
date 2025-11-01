@@ -3,8 +3,6 @@ package com.example.ffitness.repository;
 import android.app.Application;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
 import com.example.ffitness.api.ApiResponse;
 import com.example.ffitness.api.ApiService;
 import com.example.ffitness.dto.request.OnboardingRequest;
@@ -61,8 +59,33 @@ public class UserRepository {
         });
     }
 
+    public void getUserById(String userId, UserProfileCallback callback) {
+        apiService.getApiClient().getUserById(userId).enqueue(new Callback<>() {
+            @Override
+            public void onResponse(Call<ApiResponse<User>> call, Response<ApiResponse<User>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    User user = response.body().getData();
+                    Log.d(TAG, "Loaded user: " + user);
+                    callback.onSuccess(user);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<User>> call, Throwable t) {
+                String error = "Network error: " + t.getMessage();
+                Log.e(TAG, error, t);
+                callback.onError(error);
+            }
+        });
+    }
+
     public interface UserOnboardingCallback {
         void onSuccess();
+        void onError(String errorMessage);
+    }
+
+    public interface UserProfileCallback {
+        void onSuccess(User user);
         void onError(String errorMessage);
     }
 }

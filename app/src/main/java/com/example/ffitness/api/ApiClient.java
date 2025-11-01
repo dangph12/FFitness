@@ -9,6 +9,7 @@ import com.example.ffitness.dto.response.WorkoutResponse;
 import com.example.ffitness.model.Exercise;
 import com.example.ffitness.model.Favorite;
 import com.example.ffitness.model.History;
+import com.example.ffitness.model.User;
 import com.example.ffitness.model.Workout;
 
 import okhttp3.RequestBody;
@@ -65,4 +66,7 @@ public interface ApiClient {
 
     @PUT("/api/users/onboarding")
     Call<ApiResponse<Void>> completeOnboarding(@Body RequestBody body);
+
+    @GET("api/users/{userId}")
+    Call<ApiResponse<User>> getUserById(@Path("userId") String userId);
 }
