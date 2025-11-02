@@ -47,13 +47,13 @@
 
     <EditText
         android:id="@+id/et_email"
-        android:layout_width="0dp"
+        android:layout_width="300dp"
         android:layout_height="60dp"
         android:layout_marginTop="48dp"
+        android:background="@android:drawable/edit_text"
         android:hint="Email"
         android:inputType="textEmailAddress"
         android:padding="16dp"
-        android:background="@android:drawable/edit_text"
         app:layout_constraintBottom_toTopOf="@id/et_password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -61,13 +61,13 @@
 
     <EditText
         android:id="@+id/et_password"
-        android:layout_width="0dp"
+        android:layout_width="300dp"
         android:layout_height="60dp"
         android:layout_marginTop="16dp"
+        android:background="@android:drawable/edit_text"
         android:hint="Password"
         android:inputType="textPassword"
         android:padding="16dp"
-        android:background="@android:drawable/edit_text"
         app:layout_constraintBottom_toTopOf="@id/btn_login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -75,7 +75,7 @@
 
     <Button
         android:id="@+id/btn_login"
-        android:layout_width="0dp"
+        android:layout_width="300dp"
         android:layout_height="60dp"
         android:layout_marginTop="24dp"
         android:text="Login"
