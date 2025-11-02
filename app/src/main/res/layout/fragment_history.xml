@@ -84,6 +84,4 @@
         app:layout_constraintTop_toBottomOf="@id/header_container_history"
         tools:listitem="@layout/row_workout" />
 
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
