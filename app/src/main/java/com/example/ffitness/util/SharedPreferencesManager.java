@@ -7,7 +7,7 @@ public class SharedPreferencesManager {
     private static final String PREF_NAME = "auth_prefs";
     private static final String KEY_ACCESS_TOKEN = "AUTH_TOKEN";
     private static final String KEY_USER_ID = "user_id";
-
+    private static final String KEY_ONBOARDING_COMPLETED = "onboarding_completed";
     private final SharedPreferences sharedPreferences;
 
     public SharedPreferencesManager(Context context) {
@@ -36,5 +36,13 @@ public class SharedPreferencesManager {
 
     public boolean isLoggedIn() {
         return getAccessToken() != null && getUserId() != null;
+    }
+
+    public void setOnboardingCompleted(boolean completed) {
+        sharedPreferences.edit().putBoolean(KEY_ONBOARDING_COMPLETED, completed).apply();
+    }
+
+    public boolean isOnboardingCompleted() {
+        return sharedPreferences.getBoolean(KEY_ONBOARDING_COMPLETED, false);
     }
 }

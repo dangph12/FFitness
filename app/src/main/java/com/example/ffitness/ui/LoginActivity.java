@@ -83,6 +83,8 @@ public class LoginActivity extends AppCompatActivity {
                 Log.d(TAG, "Login successful, got access token");
 
                 String userId = JwtDecoder.getUserIdFromToken(accessToken);
+                Boolean profileCompleted = JwtDecoder.getOnboardingCompleteFromToken(accessToken);
+
 
                 if (userId != null) {
                     Log.d(TAG, "Decoded user ID: " + userId);
@@ -90,10 +92,17 @@ public class LoginActivity extends AppCompatActivity {
                     prefsManager.saveAccessToken(accessToken);
                     prefsManager.saveUserId(userId);
 
-                    runOnUiThread(() -> {
-                        Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
-                        navigateToMain();
-                    });
+                    if (profileCompleted == true) {
+                        runOnUiThread(() -> {
+                            Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
+                            navigateToMain();
+                        });
+                    } else {
+                        runOnUiThread(() -> {
+                            Toast.makeText(LoginActivity.this, "Please complete your profile!", Toast.LENGTH_SHORT).show();
+                            navigateToOnboarding();
+                        });
+                    }
                 } else {
                     Log.e(TAG, "Failed to decode user ID from token");
                     runOnUiThread(() -> {
@@ -120,6 +129,13 @@ public class LoginActivity extends AppCompatActivity {
 
     private void navigateToMain() {
         Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    private void navigateToOnboarding() {
+        Intent intent = new Intent(this, OnboardingActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();

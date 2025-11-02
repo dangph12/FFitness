@@ -30,4 +30,27 @@ public class JwtDecoder {
             return null;
         }
     }
+
+    public static Boolean getOnboardingCompleteFromToken(String token) {
+        try {
+            String[] parts = token.split("\\.");
+            if (parts.length < 2) {
+                return null;
+            }
+
+            String payload = parts[1];
+            byte[] decodedBytes = Base64.decode(payload, Base64.DEFAULT);
+            String decodedString = new String(decodedBytes, StandardCharsets.UTF_8);
+            JSONObject jsonObject = new JSONObject(decodedString);
+
+            if (jsonObject.has("profileCompleted")) {
+                return jsonObject.getBoolean("profileCompleted");
+            }
+
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

@@ -194,8 +194,14 @@ public class HistoryFragment extends Fragment {
                 List<Workout> workouts = new ArrayList<>();
                 Map<String, Long> workoutDurations = new HashMap<>();
 
-                for (History history: historyResponse.getHistories()) {
+                List<History> histories = historyResponse.getHistories();
+
+                // Sort histories by createdAt descending
+                histories.sort((h1, h2) -> h2.getCreatedAt().compareTo(h1.getCreatedAt()));
+
+                for (History history: histories) {
                     if (history.getWorkout() != null) {
+                        Log.d(TAG, history.getCreatedAt());
                         workouts.add(history.getWorkout());
                         if (history.getWorkout().getId() != null) {
                             workoutDurations.put(history.getWorkout().getId(), history.getTime());

@@ -125,6 +125,8 @@ public class FavoriteFragment extends Fragment {
                 currentPage = page;
 
                 List<Favorite> favorites = response.getFavorites();
+                favorites.sort((f1, f2) -> f2.getCreatedAt().compareTo(f1.getCreatedAt()));
+
                 List<Workout> workouts = new ArrayList<>();
                 Map<String, String> workoutToFavoriteMap = new HashMap<>();
 
