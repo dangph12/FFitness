@@ -38,7 +38,6 @@ public class HistoryFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private WorkoutAdapter workoutAdapter;
-    private TextView textEmpty;
 
     private HistoryRepository historyRepository;
 
@@ -71,7 +70,6 @@ public class HistoryFragment extends Fragment {
         });
 
         recyclerView = view.findViewById(R.id.recycler_view_histories);
-        textEmpty = view.findViewById(R.id.text_empty);
 
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);

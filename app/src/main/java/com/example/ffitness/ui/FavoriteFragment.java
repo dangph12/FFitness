@@ -35,7 +35,6 @@ public class FavoriteFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private WorkoutAdapter workoutAdapter;
-    private TextView textEmpty;
 
     private FavoriteRepository favoriteRepository;
     private SharedPreferencesManager prefsManager;
@@ -63,7 +62,6 @@ public class FavoriteFragment extends Fragment {
         });
 
         recyclerView = view.findViewById(R.id.recycler_view_favorites);
-        textEmpty = view.findViewById(R.id.text_empty);
 
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
@@ -144,10 +142,8 @@ public class FavoriteFragment extends Fragment {
                     workoutAdapter.setFavoriteMapping(workoutToFavoriteMap);
 
                     if (workouts.isEmpty()) {
-                        textEmpty.setVisibility(View.VISIBLE);
                         recyclerView.setVisibility(View.GONE);
                     } else {
-                        textEmpty.setVisibility(View.GONE);
                         recyclerView.setVisibility(View.VISIBLE);
                     }
                 } else {
@@ -175,7 +171,6 @@ public class FavoriteFragment extends Fragment {
                 Toast.makeText(getContext(), "Removed from favorites", Toast.LENGTH_SHORT).show();
 
                 if (workoutAdapter.getItemCount() == 0) {
-                    textEmpty.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.GONE);
                 }
             }
