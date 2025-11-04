@@ -9,6 +9,7 @@ import com.example.ffitness.dto.response.WorkoutResponse;
 import com.example.ffitness.model.Exercise;
 import com.example.ffitness.model.Favorite;
 import com.example.ffitness.model.History;
+import com.example.ffitness.model.User;
 import com.example.ffitness.model.Workout;
 
 import okhttp3.RequestBody;
@@ -17,6 +18,7 @@ import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -61,4 +63,10 @@ public interface ApiClient {
 
     @DELETE("/api/favorites/{favoriteId}")
     Call<ApiResponse<Void>> removeFavorite(@Path("favoriteId") String favoriteId);
+
+    @PUT("/api/users/onboarding")
+    Call<ApiResponse<Void>> completeOnboarding(@Body RequestBody body);
+
+    @GET("api/users/{userId}")
+    Call<ApiResponse<User>> getUserById(@Path("userId") String userId);
 }
