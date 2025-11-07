@@ -46,10 +46,10 @@ public class LoginActivity extends AppCompatActivity {
         ImageButton btnBack = findViewById(R.id.btn_back);
         btnBack.setOnClickListener(v -> finish());
 
-        if (prefsManager.isLoggedIn()) {
-            navigateToMain();
-            return;
-        }
+//        if (prefsManager.isLoggedIn()) {
+//            navigateToMain();
+//            return;
+//        }
 
         etEmail = findViewById(R.id.et_email);
         etPassword = findViewById(R.id.et_password);
