@@ -189,4 +189,13 @@ public class WorkoutFragment extends Fragment {
             }
         });
     }
+
+    private boolean isAtBottom(RecyclerView recyclerView) {
+        int visibleItemCount = layoutManager.getChildCount();
+        int totalItemCount = layoutManager.getItemCount();
+        int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+
+        return (visibleItemCount + firstVisibleItemPosition) >= (totalItemCount - 2);
+    }
+
 }
