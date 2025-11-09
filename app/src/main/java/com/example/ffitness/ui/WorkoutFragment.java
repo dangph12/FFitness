@@ -207,4 +207,11 @@ public class WorkoutFragment extends Fragment {
         }
     }
     
+    private void safeToast(String message) {
+        if (getActivity() != null && isAdded()) {
+            android.widget.Toast.makeText(getActivity(), message, android.widget.Toast.LENGTH_SHORT).show();
+        } else {
+            Log.d(TAG, "Fragment not attached → toast skipped: " + message);
+        }
+    }
 }
