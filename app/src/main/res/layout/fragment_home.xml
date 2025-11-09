@@ -102,7 +102,7 @@
         android:textSize="17sp"
         android:textColor="@android:color/white"
         app:cornerRadius="18dp"
-        app:backgroundTint="#2196F3"
+        app:backgroundTint="@color/blue"
         android:layout_marginStart="28dp"
         android:layout_marginEnd="28dp"
         android:layout_marginBottom="18dp"

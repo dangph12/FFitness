@@ -99,6 +99,7 @@
                     android:id="@+id/nextToStep2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:backgroundTint="@color/blue"
                     android:text="Tiếp tục" />
             </LinearLayout>
 
@@ -171,6 +172,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
                         android:layout_weight="1"
+                        app:backgroundTint="@color/blue"
                         android:text="Quay lại" />
 
                     <com.google.android.material.button.MaterialButton
@@ -178,6 +180,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        app:backgroundTint="@color/blue"
                         android:text="Tiếp tục" />
                 </LinearLayout>
             </LinearLayout>
@@ -283,13 +286,16 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
                         android:layout_weight="1"
-                        android:text="Quay lại" />
+                        android:text="Quay lại"
+                        android:textColor="@color/blue"
+                        app:strokeColor="@color/blue" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/nextToStep4"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        app:backgroundTint="@color/blue"
                         android:text="Tiếp tục" />
                 </LinearLayout>
             </LinearLayout>
@@ -341,6 +347,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        app:backgroundTint="@color/blue"
                         android:text="Gửi thông tin" />
                 </LinearLayout>
             </LinearLayout>
