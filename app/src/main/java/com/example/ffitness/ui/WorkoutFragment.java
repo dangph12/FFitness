@@ -198,4 +198,13 @@ public class WorkoutFragment extends Fragment {
         return (visibleItemCount + firstVisibleItemPosition) >= (totalItemCount - 2);
     }
 
+    private void setLoading(boolean loading) {
+        this.isLoading = loading;
+        if (loading) {
+            Log.d(TAG, "Đang tải thêm dữ liệu...");
+        } else {
+            Log.d(TAG, "Tải dữ liệu hoàn thành.");
+        }
+    }
+    
 }
