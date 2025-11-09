@@ -248,4 +248,15 @@ public class ProfileFragment extends Fragment {
             getActivity().finish();
         }
     }
+
+    private long calculateDaysSince(Date createdDate) {
+        if (createdDate == null) return 0;
+
+        Date today = new Date();
+
+        long diffInMillis = today.getTime() - createdDate.getTime();
+        long days = diffInMillis / (1000 * 60 * 60 * 24);
+
+        return days;
+    }
 }
