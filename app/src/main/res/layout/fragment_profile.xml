@@ -233,13 +233,14 @@
             <!-- My Favorites Button -->
             <Button
                 android:id="@+id/btn_favorites"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:text="My Favorites"
-                android:textSize="16sp"
-                android:textStyle="bold"
                 android:layout_marginBottom="16dp"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+                android:text="My Favorites"
+                android:textColor="@color/blue"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <!-- Logout Button -->
             <Button
