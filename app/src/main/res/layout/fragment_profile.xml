@@ -56,17 +56,6 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_launcher_foreground"
                     tools:ignore="ContentDescription" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|center"
-                    android:background="#80000000"
-                    android:paddingHorizontal="12dp"
-                    android:paddingVertical="6dp"
-                    android:text="Change"
-                    android:textColor="#FFFFFF"
-                    android:textSize="12sp" />
             </androidx.cardview.widget.CardView>
 
             <!-- User Name -->
