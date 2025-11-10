@@ -66,7 +66,6 @@ public class ProfileFragment extends Fragment {
         prefsManager = new SharedPreferencesManager(requireContext());
         userRepository = new UserRepository(requireActivity().getApplication());
 
-        // Initialize UI components
         ivAvatar = view.findViewById(R.id.ivAvatar);
         tvUserName = view.findViewById(R.id.tvUserName);
         tvUserEmail = view.findViewById(R.id.tvUserEmail);
@@ -142,20 +141,17 @@ public class ProfileFragment extends Fragment {
     private void displayUserProfile(User user) {
         if (user == null) return;
 
-        // Display user name
         if (user.getName() != null && !user.getName().isEmpty()) {
             tvUserName.setText(user.getName());
         } else {
             tvUserName.setText("User");
         }
 
-        // Display email
         if (user.getEmail() != null && !user.getEmail().isEmpty()) {
             tvUserEmail.setText(user.getEmail());
             tvAccountEmail.setText(user.getEmail());
         }
 
-        // Display avatar using Glide
         if (user.getAvatar() != null && !user.getAvatar().isEmpty()) {
             Glide.with(this)
                     .load(user.getAvatar())
@@ -165,7 +161,6 @@ public class ProfileFragment extends Fragment {
                     .into(ivAvatar);
         }
 
-        // Display active status
         if (user.getIsActive() != null && user.getIsActive()) {
             tvActiveStatus.setText("● Active");
             tvActiveStatus.setTextColor(getResources().getColor(android.R.color.holo_green_dark));
@@ -174,7 +169,6 @@ public class ProfileFragment extends Fragment {
             tvActiveStatus.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
         }
 
-        // Display profile completion status
         if (user.getProfileCompleted() != null && user.getProfileCompleted()) {
             tvProfileStatus.setText("✓ Profile Completed");
             tvProfileStatus.setTextColor(getResources().getColor(android.R.color.holo_green_dark));
@@ -183,11 +177,10 @@ public class ProfileFragment extends Fragment {
             tvProfileStatus.setTextColor(getResources().getColor(android.R.color.holo_orange_dark));
         }
 
-        // Display gender
         if (user.getGender() != null && !user.getGender().isEmpty()) {
             tvGender.setText("Gender: " + capitalizeFirstLetter(user.getGender()));
         } else {
-            tvGender.setText("Gender: Not set");
+            tvGender.setText("Gender: Null");
         }
 
         // Calculate and display age from DOB and also display the DOB
@@ -200,7 +193,7 @@ public class ProfileFragment extends Fragment {
             tvDateOfBirth.setText(sdf.format(user.getDob()));
         } else {
             tvAge.setText("Age: Not set");
-            tvDateOfBirth.setText("Not set"); // Updated this line
+            tvDateOfBirth.setText("Not set");
         }
     }
 
