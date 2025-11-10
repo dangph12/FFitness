@@ -258,10 +258,4 @@ public class ProfileFragment extends Fragment {
         return name.trim().substring(0, 1).toUpperCase();
     }
 
-    private double calculateBMI(Double weightKg, Double heightCm) {
-        if (weightKg == null || heightCm == null || heightCm == 0) return 0;
-        double heightM = heightCm / 100;
-        return weightKg / (heightM * heightM);
-    }
-
 }
