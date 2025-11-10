@@ -344,7 +344,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         app:backgroundTint="@color/blue"
-                        android:text="Gửi thông tin" />
+                        android:text="Submit information" />
                 </LinearLayout>
             </LinearLayout>
 
