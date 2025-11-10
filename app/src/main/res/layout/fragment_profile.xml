@@ -58,7 +58,6 @@
                     tools:ignore="ContentDescription" />
             </androidx.cardview.widget.CardView>
 
-            <!-- User Name -->
             <TextView
                 android:id="@+id/tvUserName"
                 android:layout_width="wrap_content"
@@ -70,7 +69,6 @@
                 android:textStyle="bold"
                 android:layout_marginBottom="4dp" />
 
-            <!-- Email -->
             <TextView
                 android:id="@+id/tvUserEmail"
                 android:layout_width="wrap_content"
@@ -81,7 +79,6 @@
                 android:textSize="16sp"
                 android:layout_marginBottom="12dp" />
 
-            <!-- Status Badges -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -109,7 +106,6 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <!-- Gender and Age -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -135,7 +131,6 @@
                     android:textSize="16sp" />
             </LinearLayout>
 
-            <!-- Account Information Section -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -145,7 +140,6 @@
                 android:textStyle="bold"
                 android:layout_marginBottom="16dp" />
 
-            <!-- Email Info -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -182,7 +176,6 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- DOB -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -219,7 +212,6 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- My Favorites Button -->
             <Button
                 android:id="@+id/btn_favorites"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
@@ -231,7 +223,6 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <!-- Logout Button -->
             <Button
                 android:id="@+id/btn_logout"
                 android:layout_width="match_parent"
