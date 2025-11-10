@@ -128,6 +128,50 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    private void handleLoginError(String errorMessage) {
+        Log.e(TAG, "Login error: " + errorMessage);
+
+        try {
+            JSONObject json = new JSONObject(errorMessage);
+            String message = json.optString("message", "Login failed");
+
+            if (message.contains("Validation error")) {
+
+                JSONArray errors = new JSONArray(
+                        message.substring(message.indexOf("["))
+                );
+
+                for (int i = 0; i < errors.length(); i++) {
+                    JSONObject error = errors.getJSONObject(i);
+
+                    String field = error.optJSONArray("path").optString(0, "");
+                    String msg = error.optString("message", "Invalid input");
+
+                    switch (field) {
+                        case "email":
+                            etEmail.setError(msg);
+                            etEmail.requestFocus();
+                            break;
+                        case "password":
+                            etPassword.setError(msg);
+                            etPassword.requestFocus();
+                            break;
+                    }
+                }
+
+                Toast.makeText(this, "Please fix highlighted fields", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            }
+
+        } catch (Exception e) {
+            Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "Error parsing backend response: " + e.getMessage());
+        }
+
+        resetLogin();
+    }
+
     private void resetLogin() {
         btnLogin.setEnabled(true);
         btnLogin.setText("Login");
