@@ -201,9 +201,9 @@ public class WorkoutFragment extends Fragment {
     private void setLoading(boolean loading) {
         this.isLoading = loading;
         if (loading) {
-            Log.d(TAG, "Đang tải thêm dữ liệu...");
+            Log.d(TAG, "Loading more data...");
         } else {
-            Log.d(TAG, "Tải dữ liệu hoàn thành.");
+            Log.d(TAG, "Loading complete.");
         }
     }
     

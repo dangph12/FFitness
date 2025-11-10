@@ -47,7 +47,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
-                    android:text="Bước 1: Thông tin cơ bản" />
+                    android:text="Step 1: Basic Information" />
 
                 <TextView
                     android:id="@+id/genderLabel"
@@ -56,7 +56,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:labelFor="@+id/genderGroup"
-                    android:text="Giới tính" />
+                    android:text="Gender" />
 
                 <RadioGroup
                     android:id="@+id/genderGroup"
@@ -70,13 +70,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="16dp"
-                        android:text="Nam" />
+                        android:text="Male" />
 
                     <RadioButton
                         android:id="@+id/radioFemale"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Nữ" />
+                        android:text="Female" />
                 </RadioGroup>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -89,7 +89,7 @@
                         android:id="@+id/inputDateOfBirth"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Ngày sinh"
+                        android:hint="Date of Birth"
                         android:focusable="false"
                         android:clickable="true"
                         android:inputType="none" />
@@ -120,7 +120,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
-                    android:text="Bước 2: Chỉ số cơ thể" />
+                    android:text="Step 2: Body Metrics" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -132,7 +132,7 @@
                         android:id="@+id/inputHeight"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Chiều cao (cm)"
+                        android:hint="Height (cm)"
                         android:inputType="numberDecimal" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -146,7 +146,7 @@
                         android:id="@+id/inputWeight"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Cân nặng (kg)"
+                        android:hint="Weight (kg)"
                         android:inputType="numberDecimal" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -158,7 +158,7 @@
                     android:layout_marginBottom="16dp"
                     android:gravity="center"
                     android:textStyle="italic"
-                    tools:text="BMI của bạn là 22.5" />
+                    tools:text="Your BMI is 22.5" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -202,7 +202,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
-                    android:text="Bước 3: Mục tiêu &amp; Chế độ ăn" />
+                    android:text="Step 3: Goals &amp; Diet" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -214,11 +214,10 @@
                         android:id="@+id/inputTargetWeight"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Cân nặng mục tiêu (kg)"
+                        android:hint="Target Weight (kg)"
                         android:inputType="numberDecimal" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- ===== PHẦN ĐÃ SỬA: Mục tiêu của bạn (fitnessGoal) ===== -->
                 <TextView
                     android:id="@+id/fitnessGoalLabel"
                     style="@style/TextAppearance.MaterialComponents.Subtitle1"
@@ -226,7 +225,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:labelFor="@+id/fitnessGoalGroup"
-                    android:text="Mục tiêu của bạn" />
+                    android:text="Your Goal" />
 
                 <RadioGroup
                     android:id="@+id/fitnessGoalGroup"
@@ -239,30 +238,28 @@
                         android:id="@+id/radioLoseWeight"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Giảm cân" /> <!-- Tương ứng với 'Lose Weight' -->
+                        android:text="Lose Weight" />
 
                     <RadioButton
                         android:id="@+id/radioBuildMuscle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Tăng cơ" /> <!-- Tương ứng với 'Build Muscle' -->
+                        android:text="Build Muscle" />
 
                     <RadioButton
                         android:id="@+id/radioBeHealthy"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Sống khỏe" /> <!-- Tương ứng với 'To be Healthy' -->
+                        android:text="To be Healthy" />
                 </RadioGroup>
-                <!-- ===== KẾT THÚC PHẦN SỬA ===== -->
 
-                <!-- ===== PHẦN MỚI THÊM: Chế độ ăn (diet) ===== -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/dietMenu"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="24dp"
-                    android:hint="Chế độ ăn">
+                    android:hint="Diet">
 
                     <AutoCompleteTextView
                         android:id="@+id/dietDropdown"
@@ -272,7 +269,6 @@
                         tools:ignore="LabelFor" />
 
                 </com.google.android.material.textfield.TextInputLayout>
-                <!-- ===== KẾT THÚC PHẦN MỚI THÊM ===== -->
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -317,7 +313,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
-                    android:text="Bước 4: Xác nhận thông tin" />
+                    android:text="Step 4: Confirm Information" />
 
                 <TextView
                     android:id="@+id/summaryText"
@@ -326,7 +322,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
                     android:lineSpacingExtra="4dp"
-                    tools:text="Họ và tên: Nguyễn Văn A\nTuổi: 25\nGiới tính: Nam\nChiều cao: 175 cm\nCân nặng: 70 kg\nCân nặng mục tiêu: 65 kg\nChế độ ăn: Giảm cân" />
+                    tools:text="Name: John Doe\nAge: 25\nGender: Male\nHeight: 175 cm\nWeight: 70 kg\nTarget Weight: 65 kg\nDiet: Lose Weight" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -340,7 +336,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
                         android:layout_weight="1"
-                        android:text="Quay lại" />
+                        android:text="Back" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/submitButton"
@@ -348,7 +344,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         app:backgroundTint="@color/blue"
-                        android:text="Gửi thông tin" />
+                        android:text="Submit information" />
                 </LinearLayout>
             </LinearLayout>
 

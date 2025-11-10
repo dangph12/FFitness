@@ -144,12 +144,12 @@ public class OnboardingActivity extends AppCompatActivity {
         int selectedGenderId = genderGroup.getCheckedRadioButtonId();
 
         if (dob.isEmpty()) {
-            Toast.makeText(this, "Vui lòng chọn ngày sinh", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please select date of birth", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if (selectedGenderId == -1) {
-            Toast.makeText(this, "Vui lòng chọn giới tính", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please select gender", Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -161,12 +161,12 @@ public class OnboardingActivity extends AppCompatActivity {
         String weight = inputWeight.getText().toString().trim();
 
         if (height.isEmpty()) {
-            Toast.makeText(this, "Vui lòng nhập chiều cao", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please enter height", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if (weight.isEmpty()) {
-            Toast.makeText(this, "Vui lòng nhập cân nặng", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please enter weight", Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -175,11 +175,11 @@ public class OnboardingActivity extends AppCompatActivity {
             float w = Float.parseFloat(weight);
 
             if (h <= 0 || w <= 0) {
-                Toast.makeText(this, "Chiều cao và cân nặng phải lớn hơn 0", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Height and weight must be greater than 0", Toast.LENGTH_SHORT).show();
                 return false;
             }
         } catch (NumberFormatException e) {
-            Toast.makeText(this, "Vui lòng nhập số hợp lệ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please enter valid numbers", Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -193,28 +193,28 @@ public class OnboardingActivity extends AppCompatActivity {
 
 
         if (targetWeight.isEmpty()) {
-            Toast.makeText(this, "Vui lòng nhập cân nặng mục tiêu", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please enter target weight", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if (selectedFitnessGoalId == -1) {
-            Toast.makeText(this, "Vui lòng chọn mục tiêu của bạn", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please select your goal", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if (diet.isEmpty()) {
-            Toast.makeText(this, "Vui lòng chọn chế độ ăn", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please select diet", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         try {
             float tw = Float.parseFloat(targetWeight);
             if (tw <= 0) {
-                Toast.makeText(this, "Cân nặng mục tiêu phải lớn hơn 0", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Target weight must be greater than 0", Toast.LENGTH_SHORT).show();
                 return false;
             }
         } catch (NumberFormatException e) {
-            Toast.makeText(this, "Vui lòng nhập số hợp lệ cho cân nặng mục tiêu", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please enter a valid number for target weight", Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -240,7 +240,7 @@ public class OnboardingActivity extends AppCompatActivity {
             runOnUiThread(() -> {
                 submitButton.setEnabled(true);
                 Toast.makeText(OnboardingActivity.this,
-                        "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại!",
+                        "Session expired. Please login again!",
                         Toast.LENGTH_LONG).show();
 
                 Intent intent = new Intent(OnboardingActivity.this, LoginActivity.class);
@@ -278,7 +278,7 @@ public class OnboardingActivity extends AppCompatActivity {
                         Log.d(TAG, "Onboarding completed successfully!");
                         runOnUiThread(() -> {
                             Toast.makeText(OnboardingActivity.this,
-                                    "Hoàn thành thiết lập thông tin!", Toast.LENGTH_SHORT).show();
+                                    "Setup completed successfully!", Toast.LENGTH_SHORT).show();
 
                             prefsManager.setOnboardingCompleted(true);
 
@@ -297,7 +297,7 @@ public class OnboardingActivity extends AppCompatActivity {
 
                             if (errorMessage.contains("401") || errorMessage.toLowerCase().contains("unauthorized")) {
                                 Toast.makeText(OnboardingActivity.this,
-                                        "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại!",
+                                        "Session expired. Please login again!",
                                         Toast.LENGTH_LONG).show();
 
                                 prefsManager.clear();
@@ -307,7 +307,7 @@ public class OnboardingActivity extends AppCompatActivity {
                                 finish();
                             } else {
                                 Toast.makeText(OnboardingActivity.this,
-                                        "Lỗi: " + errorMessage, Toast.LENGTH_LONG).show();
+                                        "Error: " + errorMessage, Toast.LENGTH_LONG).show();
                             }
                         });
                     }
@@ -319,12 +319,12 @@ public class OnboardingActivity extends AppCompatActivity {
         if (selectedId == -1) return "";
 
         RadioButton selectedRadioButton = findViewById(selectedId);
-        String vietnameseGender = selectedRadioButton.getText().toString();
+        String englishGender = selectedRadioButton.getText().toString();
 
-        switch (vietnameseGender) {
-            case "Nam":
+        switch (englishGender) {
+            case "Male":
                 return "male";
-            case "Nữ":
+            case "Female":
                 return "female";
             default:
                 return "other";
@@ -336,14 +336,14 @@ public class OnboardingActivity extends AppCompatActivity {
         if (selectedId == -1) return "";
 
         RadioButton selectedRadioButton = findViewById(selectedId);
-        String vietnameseGoal = selectedRadioButton.getText().toString();
+        String englishGoal = selectedRadioButton.getText().toString();
 
-        switch (vietnameseGoal) {
-            case "Giảm cân":
+        switch (englishGoal) {
+            case "Lose Weight":
                 return "Lose Weight";
-            case "Tăng cơ":
+            case "Build Muscle":
                 return "Build Muscle";
-            case "Sống khỏe":
+            case "To be Healthy":
                 return "To be Healthy";
             default:
                 return "";
@@ -403,22 +403,20 @@ public class OnboardingActivity extends AppCompatActivity {
                 float heightInM = heightInCm / 100;
                 if (heightInM > 0 && weightInKg > 0) {
                     float bmi = weightInKg / (heightInM * heightInM);
-                    bmiResultText.setText(String.format("Chỉ số BMI của bạn là: %.1f", bmi));
+                    bmiResultText.setText(String.format("Your BMI is: %.1f", bmi));
                 } else {
-                    bmiResultText.setText("Chiều cao và cân nặng phải lớn hơn 0");
+                    bmiResultText.setText("Height and weight must be greater than 0");
                 }
             } catch (NumberFormatException e) {
-                bmiResultText.setText("Vui lòng nhập số hợp lệ");
+                bmiResultText.setText("Please enter valid numbers");
             }
         } else {
-            bmiResultText.setText("BMI của bạn sẽ hiển thị ở đây");
+            bmiResultText.setText("Your BMI will be displayed here");
         }
     }
 
-    // THÊM MỚI: Cài đặt các tùy chọn cho AutoCompleteTextView
     private void setupDietDropdown() {
-        String[] diets = getResources().getStringArray(R.array.diet_options); // Giả sử bạn có một string-array trong strings.xml
-        // Hoặc hardcode: String[] diets = new String[]{"Truyền thống", "Keto", "Low Carb", "Eat Clean"};
+        String[] diets = getResources().getStringArray(R.array.diet_options);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_dropdown_item_1line,
@@ -429,7 +427,7 @@ public class OnboardingActivity extends AppCompatActivity {
 
     private void updateSummaryText() {
         String dateOfBirth = inputDateOfBirth.getText().toString();
-        String gender = "Chưa chọn";
+        String gender = "Not selected";
         int selectedGenderId = genderGroup.getCheckedRadioButtonId();
         if (selectedGenderId != -1) {
             RadioButton selectedRadioButton = findViewById(selectedGenderId);
@@ -439,37 +437,32 @@ public class OnboardingActivity extends AppCompatActivity {
         String height = inputHeight.getText().toString();
         String weight = inputWeight.getText().toString();
         String bmiResult = bmiResultText.getText().toString();
-        String bmiValue = "Chưa tính";
+        String bmiValue = "Not calculated";
         if (bmiResult.contains(":")) {
             bmiValue = bmiResult.substring(bmiResult.indexOf(":") + 1).trim();
         }
 
         String targetWeight = inputTargetWeight.getText().toString();
 
-        // THAY ĐỔI: Lấy mục tiêu và chế độ ăn từ các view mới
         String fitnessGoal = getSelectedFitnessGoal();
         if (fitnessGoal.isEmpty()) {
-            fitnessGoal = "Chưa chọn";
+            fitnessGoal = "Not selected";
         }
 
         String diet = dietDropdown.getText().toString();
         if (diet.isEmpty()) {
-            diet = "Chưa chọn";
+            diet = "Not selected";
         }
 
-        String summary = "Giới tính: " + gender + "\n" +
-                "Ngày sinh: " + (dateOfBirth.isEmpty() ? "Chưa chọn" : dateOfBirth) + "\n\n" +
-                "Chiều cao: " + (height.isEmpty() ? "Chưa nhập" : height + " cm") + "\n" +
-                "Cân nặng: " + (weight.isEmpty() ? "Chưa nhập" : weight + " kg") + "\n" +
-                "Chỉ số BMI: " + bmiValue + "\n\n" +
-                "Cân nặng mục tiêu: " + (targetWeight.isEmpty() ? "Chưa nhập" : targetWeight + " kg") + "\n" +
-                "Mục tiêu của bạn: " + fitnessGoal + "\n" +
-                "Chế độ ăn: " + diet;
+        String summary = "Gender: " + gender + "\n" +
+                "Date of Birth: " + (dateOfBirth.isEmpty() ? "Not selected" : dateOfBirth) + "\n\n" +
+                "Height: " + (height.isEmpty() ? "Not entered" : height + " cm") + "\n" +
+                "Weight: " + (weight.isEmpty() ? "Not entered" : weight + " kg") + "\n" +
+                "BMI: " + bmiValue + "\n\n" +
+                "Target Weight: " + (targetWeight.isEmpty() ? "Not entered" : targetWeight + " kg") + "\n" +
+                "Your Goal: " + fitnessGoal + "\n" +
+                "Diet: " + diet;
 
         summaryText.setText(summary);
     }
-
-    // CÁC PHƯƠNG THỨC BỊ XÓA:
-    // private String getSelectedDiet() { ... }
-    // private String determineFitnessGoal(double currentWeight, double targetWeight) { ... }
 }

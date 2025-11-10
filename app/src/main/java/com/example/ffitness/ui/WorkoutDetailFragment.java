@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.ffitness.MainActivity;
 import com.example.ffitness.R;
 import com.example.ffitness.model.Workout;
@@ -26,6 +28,8 @@ public class WorkoutDetailFragment extends Fragment {
 
     private TextView textViewWorkoutTitle, textViewCreator, textViewVisibility;
     private ExerciseAdapter exerciseAdapter;
+
+    private ImageView imageWorkoutDetail;
 
     private Workout currentWorkout;
 
@@ -54,6 +58,7 @@ public class WorkoutDetailFragment extends Fragment {
             }
         });
 
+        imageWorkoutDetail = view.findViewById(R.id.image_workout_detail);
         textViewWorkoutTitle = view.findViewById(R.id.text_view_workout_title);
         textViewCreator = view.findViewById(R.id.text_view_creator);
         textViewVisibility = view.findViewById(R.id.text_view_visibility);
@@ -88,6 +93,12 @@ public class WorkoutDetailFragment extends Fragment {
     }
 
     private void bindWorkoutData(Workout workout) {
+        Glide.with(this)
+                .load(workout.getImage())
+                .placeholder(R.drawable.logo)
+                .error(R.drawable.ic_launcher_foreground)
+                .into(imageWorkoutDetail);
+
         textViewWorkoutTitle.setText(workout.getTitle());
         textViewCreator.setText(workout.getUser() != null
                 ? "by " + workout.getUser().getName()
