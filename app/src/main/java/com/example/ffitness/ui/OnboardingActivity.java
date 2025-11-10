@@ -227,15 +227,6 @@ public class OnboardingActivity extends AppCompatActivity {
         String userId = prefsManager.getUserId();
         String token = prefsManager.getAccessToken();
 
-        Log.d(TAG, "=== ONBOARDING SUBMISSION DEBUG ===");
-        Log.d(TAG, "UserId: " + userId);
-        Log.d(TAG, "Token exists: " + (token != null && !token.isEmpty()));
-        if (token != null) {
-            Log.d(TAG, "Token: " + token);
-        } else {
-            Log.e(TAG, "TOKEN IS NULL! User needs to login again.");
-        }
-
         if (token == null || token.isEmpty()) {
             runOnUiThread(() -> {
                 submitButton.setEnabled(true);
@@ -260,22 +251,10 @@ public class OnboardingActivity extends AppCompatActivity {
         String diet = dietDropdown.getText().toString().trim();
         String fitnessGoal = getSelectedFitnessGoal();
 
-        Log.d(TAG, "Request Data:");
-        Log.d(TAG, "- Gender: " + gender);
-        Log.d(TAG, "- DOB: " + dob);
-        Log.d(TAG, "- Height: " + height);
-        Log.d(TAG, "- Weight: " + weight);
-        Log.d(TAG, "- BMI: " + bmi);
-        Log.d(TAG, "- Target Weight: " + targetWeight);
-        Log.d(TAG, "- Diet: " + diet);
-        Log.d(TAG, "- Fitness Goal: " + fitnessGoal);
-        Log.d(TAG, "===================================");
-
         userRepository.completeOnboarding(userId, gender, dob, height, weight, bmi,
                 targetWeight, diet, fitnessGoal, new UserRepository.UserOnboardingCallback() {
                     @Override
                     public void onSuccess() {
-                        Log.d(TAG, "Onboarding completed successfully!");
                         runOnUiThread(() -> {
                             Toast.makeText(OnboardingActivity.this,
                                     "Setup completed successfully!", Toast.LENGTH_SHORT).show();
@@ -291,7 +270,6 @@ public class OnboardingActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(String errorMessage) {
-                        Log.e(TAG, "Onboarding error: " + errorMessage);
                         runOnUiThread(() -> {
                             submitButton.setEnabled(true);
 
