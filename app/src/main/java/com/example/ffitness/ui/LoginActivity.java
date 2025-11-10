@@ -3,6 +3,7 @@ package com.example.ffitness.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -20,6 +21,9 @@ import com.example.ffitness.repository.AuthRepository;
 import com.example.ffitness.util.JwtDecoder;
 import com.example.ffitness.util.SharedPreferencesManager;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
@@ -34,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -46,11 +51,6 @@ public class LoginActivity extends AppCompatActivity {
         ImageButton btnBack = findViewById(R.id.btn_back);
         btnBack.setOnClickListener(v -> finish());
 
-//        if (prefsManager.isLoggedIn()) {
-//            navigateToMain();
-//            return;
-//        }
-
         etEmail = findViewById(R.id.et_email);
         etPassword = findViewById(R.id.et_password);
         btnLogin = findViewById(R.id.btn_login);
@@ -62,17 +62,31 @@ public class LoginActivity extends AppCompatActivity {
         String email = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
 
+        // ======= VALIDATION =======
         if (email.isEmpty()) {
-            etEmail.setError("Email is required");
+            Toast.makeText(this, "Email is required", Toast.LENGTH_SHORT).show();
+            etEmail.requestFocus();
+            return;
+        }
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(this, "Invalid email format", Toast.LENGTH_SHORT).show();
             etEmail.requestFocus();
             return;
         }
 
         if (password.isEmpty()) {
-            etPassword.setError("Password is required");
+            Toast.makeText(this, "Password is required", Toast.LENGTH_SHORT).show();
             etPassword.requestFocus();
             return;
         }
+
+        if (password.length() < 6) {
+            Toast.makeText(this, "Password must be at least 6 characters", Toast.LENGTH_SHORT).show();
+            etPassword.requestFocus();
+            return;
+        }
+        // ===========================
 
         btnLogin.setEnabled(false);
         btnLogin.setText("Logging in...");
@@ -85,24 +99,19 @@ public class LoginActivity extends AppCompatActivity {
                 String userId = JwtDecoder.getUserIdFromToken(accessToken);
                 Boolean profileCompleted = JwtDecoder.getOnboardingCompleteFromToken(accessToken);
 
-
                 if (userId != null) {
-                    Log.d(TAG, "Decoded user ID: " + userId);
-
                     prefsManager.saveAccessToken(accessToken);
                     prefsManager.saveUserId(userId);
 
-                    if (profileCompleted == true) {
-                        runOnUiThread(() -> {
+                    runOnUiThread(() -> {
+                        if (Boolean.TRUE.equals(profileCompleted)) {
                             Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
                             navigateToMain();
-                        });
-                    } else {
-                        runOnUiThread(() -> {
+                        } else {
                             Toast.makeText(LoginActivity.this, "Please complete your profile!", Toast.LENGTH_SHORT).show();
                             navigateToOnboarding();
-                        });
-                    }
+                        }
+                    });
                 } else {
                     Log.e(TAG, "Failed to decode user ID from token");
                     runOnUiThread(() -> {
@@ -114,10 +123,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onError(String errorMessage) {
-                runOnUiThread(() -> {
-                    Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
-                    resetLogin();
-                });
+                runOnUiThread(() -> handleLoginError(errorMessage));
             }
         });
     }
